@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Blog App</string>
+    <string name="splash_main_txt">BLOG.</string>
+    <string name="splasgbackground">splashBackground</string>
+    <string name="design_by">Design by</string>
+    <string name="sarmadtechempire">sarmadtechempire</string>
+</resources>

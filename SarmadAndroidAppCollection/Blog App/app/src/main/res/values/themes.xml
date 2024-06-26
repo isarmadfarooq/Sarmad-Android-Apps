@@ -1,0 +1,7 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.BlogApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="splashTextColor">@color/splash_text_color_dark</item>
+    </style>
+    <style name="Theme.BlogApp" parent="Base.Theme.BlogApp" />
+</resources>
