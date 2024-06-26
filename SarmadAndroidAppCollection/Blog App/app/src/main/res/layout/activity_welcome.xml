@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".register.WelcomeActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.1"
+        android:contentDescription="@string/welcomescreenbackground"
+        android:scaleType="centerCrop"
+        android:src="@drawable/rectangle_background" />
+
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="@string/splash_main_txt"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="45sp" />
+
+        <TextView
+            android:id="@+id/share_your_story"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="@string/share_your_story_txt"
+            android:layout_marginTop="90dp"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/with_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="@string/with_us_txt"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="32sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="@string/login_btn_txt"
+        app:backgroundTint="@null"
+        android:background="@drawable/btn_background_stroke_red"
+        android:textSize="20sp"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:textColor="?attr/splashTextColor"/>
+
+    <TextView
+        android:id="@+id/new_here_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_here_txt"
+        android:layout_below="@id/login_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:textColor="?attr/splashTextColor"
+        android:textSize="14sp"/>
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/new_here_txt"
+        android:layout_centerHorizontal="true"
+        android:elevation="10dp"
+        android:text="@string/register_btn_txt"
+        app:backgroundTint="@null"
+        android:background="@drawable/btn_background_stroke_blue"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:textColor="?attr/splashTextColor"/>
+
+    <TextView
+        android:id="@+id/deign_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/design_by"
+        android:textColor="?attr/splashTextColor"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:layout_marginBottom="36dp"
+        android:textSize="17sp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/sarmad_tech_empire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:textSize="17sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:textColor="?attr/splashTextColor"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:text="@string/sarmadtechempire" />
+
+</RelativeLayout>

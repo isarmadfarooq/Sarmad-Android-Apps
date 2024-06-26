@@ -4,4 +4,12 @@
     <string name="splasgbackground">splashBackground</string>
     <string name="design_by">Design by</string>
     <string name="sarmadtechempire">sarmadtechempire</string>
+    <string name="welcomescreenbackground">welcomescreenbackground</string>
+    <string name="share_your_story_txt">Share your story</string>
+    <string name="with_us_txt">with us</string>
+    <string name="login_btn_txt">Login</string>
+    <string name="new_here_txt">New here?</string>
+    <string name="register_btn_txt">Register</string>
+    <string name="enter_your_email_et">Enter Your Email</string>
+    <string name="enter_password_et">Enter Password</string>
 </resources>
