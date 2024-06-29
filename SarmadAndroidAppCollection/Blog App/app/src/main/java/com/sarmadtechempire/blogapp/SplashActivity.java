@@ -11,6 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.sarmadtechempire.blogapp.register.RegisterActivity;
+import com.sarmadtechempire.blogapp.register.SignInActivity;
+import com.sarmadtechempire.blogapp.register.WelcomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
 
-        Intent iHome = new Intent(SplashActivity.this, RegisterActivity.class);
+        Intent iHome = new Intent(SplashActivity.this, SignInActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
