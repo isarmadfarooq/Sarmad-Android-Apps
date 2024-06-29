@@ -1,7 +1,10 @@
 package com.sarmadtechempire.blogapp.register;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,13 +13,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.sarmadtechempire.blogapp.R;
+import com.sarmadtechempire.blogapp.databinding.ActivitySignInBinding;
 
 public class SignInActivity extends AppCompatActivity {
 
-    AppCompatEditText enter_mail_et, enter_password_et;
+    private FirebaseAuth auth;
 
-    Button register_btn;
+    private ActivitySignInBinding binding;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +31,24 @@ public class SignInActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_in);
 
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        enter_mail_et = findViewById(R.id.enter_mail_et);
-        enter_password_et = findViewById(R.id.enter_password_et);
-        register_btn = findViewById(R.id.register_btn);
+        // Initializing Firebase Auth
+
+        auth = FirebaseAuth.getInstance();
+
+        binding.registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent register = new Intent(SignInActivity.this, RegisterActivity.class);
+                startActivity(register);
+                finish();
+
+
+                Toast.makeText(SignInActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 

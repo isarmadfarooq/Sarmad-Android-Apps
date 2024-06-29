@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
 
-        Intent iHome = new Intent(SplashActivity.this, SignInActivity.class);
+        Intent iHome = new Intent(SplashActivity.this, WelcomeActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
