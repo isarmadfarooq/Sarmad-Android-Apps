@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".register.RegisterActivity"
+    tools:ignore="ScrollViewCount">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/welcomescreenbackground"
+                android:src="@drawable/rectangle_background"
+                android:scaleType="centerCrop"
+                android:alpha="0.1"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/main_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:text="@string/splash_main_txt"
+                android:textColor="?attr/splashTextColor"
+                android:textSize="50sp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/share_your_story"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/main_txt"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:text="@string/share_your_story_txt"
+                android:textColor="?attr/splashTextColor"
+                android:textSize="38sp" />
+
+            <TextView
+                android:id="@+id/with_us"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:text="@string/with_us_txt"
+                android:layout_below="@id/share_your_story"
+                android:layout_centerHorizontal="true"
+                android:textColor="?attr/splashTextColor"
+                android:textSize="38sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/userProfileCv"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/with_us"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="200dp"
+                android:background="@drawable/rectangle_background">
+
+                <ImageView
+                    android:id="@+id/profileIv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/profile1"
+                    android:scaleType="centerCrop"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/registerNameEt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_your_name_et"
+                android:background="@drawable/btn_background_stroke_blue"
+                android:textSize="20sp"
+                android:layout_below="@+id/userProfileCv"
+                android:inputType="textPersonName"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:gravity="center"
+                android:textColorHint="?attr/splashTextColor"
+                android:textColor="?attr/splashTextColor"
+                android:layout_marginTop="30dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/registerMailEt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_your_email_et"
+                android:layout_below="@+id/registerNameEt"
+                android:background="@drawable/btn_background_stroke_blue"
+                android:textSize="20sp"
+                android:inputType="textEmailAddress"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="?attr/splashTextColor"
+                android:textColor="?attr/splashTextColor"
+                android:layout_marginTop="20dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/registerPasswordEt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/registerMailEt"
+                android:hint="@string/enter_password_et"
+                android:background="@drawable/btn_background_stroke_blue"
+                android:textSize="20sp"
+                android:inputType="textPassword"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="?attr/splashTextColor"
+                android:textColor="?attr/splashTextColor"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/login_btn_txt"
+                app:backgroundTint="@null"
+                android:layout_below="@id/registerPasswordEt"
+                android:background="@drawable/btn_background_stroke_red"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:textColor="?attr/splashTextColor" />
+
+            <TextView
+                android:id="@+id/new_here_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_below="@+id/login_btn"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:text="@string/new_here_txt"
+                android:textColor="?attr/splashTextColor"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/register_btn_txt"
+                android:layout_below="@+id/new_here_txt"
+                android:layout_centerHorizontal="true"
+                app:backgroundTint="@color/blue"
+                android:background="@drawable/btn_background_stroke_blue"
+                android:textSize="20sp"
+                android:fontFamily="@font/love_ya_like_a_sister"
+                android:textColor="?attr/splashTextColor"
+                android:elevation="10dp" />
+
+        <TextView
+            android:id="@+id/orTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/register_btn"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="@string/or_tv"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/registerWithGoogleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/orTv"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="@string/register_with_google_tv"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/googleRegisterBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/registerWithGoogleTv"
+            android:layout_centerHorizontal="true"
+            android:elevation="10dp"
+            android:textAllCaps="false"
+            android:text="@string/register_with_google_btn"
+            app:backgroundTint="@null"
+            android:background="@drawable/google_btn"
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:textColor="?attr/splashTextColor"
+            android:drawableStart="@drawable/google_icon"
+            android:drawablePadding="8dp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/deign_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/design_by"
+            android:layout_below="@id/googleRegisterBtn"
+            android:textColor="?attr/splashTextColor"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:layout_marginTop="50dp"
+            android:textSize="17sp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/sarmad_tech_empire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:textSize="17sp"
+            android:layout_below="@id/deign_by"
+            android:textColor="?attr/splashTextColor"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/love_ya_like_a_sister"
+            android:text="@string/sarmadtechempire" />
+
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:indicatorSize="48dp"
+            app:trackThickness="4dp"
+            app:indicatorColor="@android:color/darker_gray"
+            app:trackColor="@color/blue"/>
+
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>
