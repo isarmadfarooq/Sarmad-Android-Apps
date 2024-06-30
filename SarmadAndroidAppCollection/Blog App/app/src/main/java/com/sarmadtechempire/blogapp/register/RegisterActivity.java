@@ -54,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Initializing Firebase
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance(" https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
+        database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
         storage = FirebaseStorage.getInstance();
 
         setupUI();
@@ -137,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (imageUri != null) {
                                 uploadProfileImage(userId);
                             } else {
-                                Toast.makeText(RegisterActivity.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
+                                navigateToWelcome();
                             }
                         }
                     })
@@ -157,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(RegisterActivity.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
+                        navigateToWelcome();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -166,6 +166,13 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void navigateToWelcome() {
+        Toast.makeText(RegisterActivity.this, "User Registered Successfully 😊", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void selectProfileImage() {
