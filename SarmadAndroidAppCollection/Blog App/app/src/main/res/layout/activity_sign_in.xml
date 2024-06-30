@@ -55,7 +55,7 @@
 
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/register_mail_et"
+            android:id="@+id/login_mail_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/with_us"
@@ -72,10 +72,10 @@
             android:layout_marginTop="100dp"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/register_password_et"
+            android:id="@+id/login_password_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/register_mail_et"
+            android:layout_below="@id/login_mail_et"
             android:layout_centerHorizontal="true"
             android:hint="@string/enter_password_et"
             android:background="@drawable/btn_background_stroke_red"
@@ -92,7 +92,7 @@
             android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/register_password_et"
+            android:layout_below="@id/login_password_et"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="100dp"
             android:text="@string/login_btn_txt"
