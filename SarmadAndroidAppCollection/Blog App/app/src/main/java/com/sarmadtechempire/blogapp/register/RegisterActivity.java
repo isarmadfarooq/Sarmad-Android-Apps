@@ -3,6 +3,7 @@ package com.sarmadtechempire.blogapp.register;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -51,84 +52,33 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Initializing Firebase Auth
+        // Initializing Firebase
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance(" https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
         storage = FirebaseStorage.getInstance();
 
+        setupUI();
+    }
+
+    private void setupUI() {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signIn = new Intent(RegisterActivity.this, SignInActivity.class);
-                startActivity(signIn);
-                finish();
-
-                Toast.makeText(RegisterActivity.this, "Welcome to login screen", Toast.LENGTH_SHORT).show();
+                navigateToSignIn();
             }
         });
 
         binding.registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = binding.registerNameEt.getText().toString();
-                String email = binding.registerMailEt.getText().toString();
-                String password = binding.registerPasswordEt.getText().toString();
-
-                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
-                } else {
-                    binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
-
-                    auth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    binding.progressBar.setVisibility(View.GONE); // Hide progress bar
-
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser user = auth.getCurrentUser();
-                                        if (user != null) {
-                                            DatabaseReference databaseReference = database.getReference("users");
-                                            String userId = user.getUid();
-                                            UserData userData = new UserData(name, email);
-
-                                            databaseReference.child(userId).setValue(userData);
-
-                                            if (imageUri != null) {
-                                                StorageReference storageReference = storage.getReference().child("profile_image/" + userId + ".jpg");
-                                                storageReference.putFile(imageUri)
-                                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                            @Override
-                                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                                Toast.makeText(RegisterActivity.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                            } else {
-                                                Toast.makeText(RegisterActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    } else {
-                                        Toast.makeText(RegisterActivity.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
+                registerUser();
             }
         });
 
         binding.userProfileCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                selectProfileImage();
             }
         });
 
@@ -137,6 +87,92 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void navigateToSignIn() {
+        Intent signIn = new Intent(RegisterActivity.this, SignInActivity.class);
+        startActivity(signIn);
+        finish();
+        Toast.makeText(RegisterActivity.this, "Welcome to login screen", Toast.LENGTH_SHORT).show();
+    }
+
+    private void registerUser() {
+        String name = binding.registerNameEt.getText().toString();
+        String email = binding.registerMailEt.getText().toString();
+        String password = binding.registerPasswordEt.getText().toString();
+
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(RegisterActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
+        } else {
+            binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
+
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            binding.progressBar.setVisibility(View.GONE); // Hide progress bar
+
+                            if (task.isSuccessful()) {
+                                handleRegistrationSuccess();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void handleRegistrationSuccess() {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            DatabaseReference databaseReference = database.getReference("users");
+            String userId = user.getUid();
+            UserData userData = new UserData(binding.registerNameEt.getText().toString(), binding.registerMailEt.getText().toString());
+
+            databaseReference.child(userId).setValue(userData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "User data saved successfully");
+                            if (imageUri != null) {
+                                uploadProfileImage(userId);
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("TAG", "Error saving user data: " + e.getMessage());
+                            Toast.makeText(RegisterActivity.this, "Error saving user data", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    private void uploadProfileImage(String userId) {
+        StorageReference storageReference = storage.getReference().child("profile_image/" + userId + ".jpg");
+        storageReference.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(RegisterActivity.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void selectProfileImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override

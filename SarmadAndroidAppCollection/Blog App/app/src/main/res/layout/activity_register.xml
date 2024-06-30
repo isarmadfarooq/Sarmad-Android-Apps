@@ -204,7 +204,6 @@
             android:fontFamily="@font/love_ya_like_a_sister"
             android:textColor="?attr/splashTextColor"
             android:drawableStart="@drawable/google_icon"
-            android:drawablePadding="8dp"
             android:padding="10dp"/>
 
         <TextView
