@@ -19,6 +19,9 @@
     <string name="or_tv">Or</string>
     <string name="register_with_google_btn">Register with Google</string>
     <string name="new_feeds_tv">New feeds</string>
-    <string name="save_article_btn">save_article_btn</string>
+    <string name="save_article_btn">Save Article</string>
     <string name="search_view_hint_text">Search</string>
+    <string name="blog_heading_txt">Please Start Writing Better Git Commits</string>
+    <string name="blog_user_profile_image">Blog User Profile Image</string>
+    <string name="blogger_name_tv">New\nBlogger</string>
 </resources>
