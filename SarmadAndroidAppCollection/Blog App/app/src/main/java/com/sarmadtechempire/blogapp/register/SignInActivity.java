@@ -3,13 +3,11 @@ package com.sarmadtechempire.blogapp.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,7 +28,6 @@ public class SignInActivity extends AppCompatActivity {
 
     private ActivitySignInBinding binding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +38,8 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // Initializing Firebase Auth
-
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance(" https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
+        database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
 
         setupUI();
     }
@@ -61,7 +57,6 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loginUser();
-
             }
         });
 
@@ -72,46 +67,38 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToRegistration()
-    {
+    private void navigateToRegistration() {
         Intent register = new Intent(SignInActivity.this, RegisterActivity.class);
         startActivity(register);
         finish();
         Toast.makeText(SignInActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
-
     }
 
-    private void loginUser()
-    {
+    private void loginUser() {
         String loginEmail = binding.loginMailEt.getText().toString();
         String loginPassword = binding.loginPasswordEt.getText().toString();
 
-        if(loginEmail.isEmpty() || loginPassword.isEmpty())
-        {
+        if (loginEmail.isEmpty() || loginPassword.isEmpty()) {
             Toast.makeText(SignInActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
+            binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
+
             auth.signInWithEmailAndPassword(loginEmail, loginPassword)
                     .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            binding.progressBar.setVisibility(View.GONE); // Hide progress bar
 
-                            if(task.isSuccessful())
-                            {
+                            if (task.isSuccessful()) {
                                 Toast.makeText(SignInActivity.this, "Login Successfully 😊", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
-                            }
-                            else
-                            {
-                                Toast.makeText(SignInActivity.this, "Login Failed. Please Enter Correct Details ", Toast.LENGTH_SHORT).show();
-
+                            } else {
+                                Toast.makeText(SignInActivity.this, "Login Failed. Please Enter Correct Details", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-
         }
     }
 }

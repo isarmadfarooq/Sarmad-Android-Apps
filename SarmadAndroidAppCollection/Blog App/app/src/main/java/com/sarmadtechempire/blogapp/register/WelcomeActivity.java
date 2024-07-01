@@ -3,7 +3,6 @@ package com.sarmadtechempire.blogapp.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -12,13 +11,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.sarmadtechempire.blogapp.MainActivity;
 import com.sarmadtechempire.blogapp.R;
 import com.sarmadtechempire.blogapp.databinding.ActivityWelcomeBinding;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     private ActivityWelcomeBinding binding;
-
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +28,10 @@ public class WelcomeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome);
 
+        auth = FirebaseAuth.getInstance();
+
         binding = ActivityWelcomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
 
         onClick();
 
@@ -40,9 +42,8 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
 
-    private void onClick()
-    {
-       binding.loginBtn.setOnClickListener(new View.OnClickListener() {
+    private void onClick() {
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent signIn = new Intent(WelcomeActivity.this, SignInActivity.class);
@@ -62,7 +63,23 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 Toast.makeText(WelcomeActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
             }
-
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        binding.progressBar.setVisibility(View.GONE); // Hide progress bar
     }
 }
