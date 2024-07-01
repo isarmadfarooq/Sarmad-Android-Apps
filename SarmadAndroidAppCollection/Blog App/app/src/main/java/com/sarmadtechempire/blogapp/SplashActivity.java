@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sarmadtechempire.blogapp.register.RegisterActivity;
 import com.sarmadtechempire.blogapp.register.SignInActivity;
 import com.sarmadtechempire.blogapp.register.WelcomeActivity;
@@ -21,6 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
+
 
         Intent iHome = new Intent(SplashActivity.this, WelcomeActivity.class);
         new Handler().postDelayed(new Runnable() {
@@ -38,4 +41,5 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
     }
+
 }

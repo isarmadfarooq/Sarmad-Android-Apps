@@ -117,4 +117,15 @@
         android:fontFamily="@font/love_ya_like_a_sister"
         android:text="@string/sarmadtechempire" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:indicatorSize="48dp"
+        app:trackThickness="4dp"
+        app:indicatorColor="@android:color/darker_gray"
+        app:trackColor="@color/blue"/>
+
 </RelativeLayout>
