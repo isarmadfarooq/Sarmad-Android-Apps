@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="264dp"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="9dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/blog_heading_text"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textSize="16sp"
+            android:textColor="@color/blue"
+            android:layout_marginStart="9dp"
+            android:ellipsize="end"
+            android:layout_marginTop="13dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textStyle="bold"
+            android:text="@string/blog_heading_txt"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/blogUserProfileCv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toEndOf="@id/blog_heading_text"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="9dp"
+            app:cardCornerRadius="200dp">
+
+            <ImageView
+                android:id="@+id/profileIv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/blog_user_profile_image"
+                android:src="@drawable/profile1"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="44dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="12sp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="9dp"
+            android:layout_toEndOf="@id/blogUserProfileCv"
+            android:textColor="?attr/splashTextColor"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/blogger_name_tv"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:padding="5dp"
+            android:ellipsize="end"
+            android:maxLines="2"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
