@@ -7,4 +7,5 @@
     <color name="light_white">#EFEFEF</color>
     <color name="splash_text_color_dark">#000000</color>
     <color name="splash_text_color_light">#FFFFFF</color>
+    <color name="date_color">#C8C8C8</color>
 </resources>

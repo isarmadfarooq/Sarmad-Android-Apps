@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/new_feeds_tv"
         android:layout_marginTop="24dp"
-        android:layout_marginStart="33dp"
+        android:layout_marginStart="32dp"
         android:layout_marginEnd="33dp"
         app:queryHint="@string/search_view_hint_text"
         app:iconifiedByDefault="false"
@@ -69,6 +69,7 @@
         app:searchIcon="@drawable/search"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/blogRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
