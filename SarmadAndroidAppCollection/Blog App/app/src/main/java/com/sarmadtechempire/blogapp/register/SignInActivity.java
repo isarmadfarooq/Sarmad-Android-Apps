@@ -21,6 +21,88 @@ import com.sarmadtechempire.blogapp.MainActivity;
 import com.sarmadtechempire.blogapp.R;
 import com.sarmadtechempire.blogapp.databinding.ActivitySignInBinding;
 
+//public class SignInActivity extends AppCompatActivity {
+//
+//    private FirebaseAuth auth;
+//    private FirebaseDatabase database;
+//
+//    private ActivitySignInBinding binding;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        EdgeToEdge.enable(this);
+//        setContentView(R.layout.activity_sign_in);
+//
+//        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+//
+//        // Initializing Firebase Auth
+//        auth = FirebaseAuth.getInstance();
+//        database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
+//
+//        setupUI();
+//    }
+//
+//    public void setupUI() {
+//
+//        binding.registerBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                navigateToRegistration();
+//            }
+//        });
+//
+//        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loginUser();
+//            }
+//        });
+//
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
+//    }
+//
+//    private void navigateToRegistration() {
+//        Intent register = new Intent(SignInActivity.this, RegisterActivity.class);
+//        startActivity(register);
+//        finish();
+//        Toast.makeText(SignInActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    private void loginUser() {
+//        String loginEmail = binding.loginMailEt.getText().toString();
+//        String loginPassword = binding.loginPasswordEt.getText().toString();
+//
+//        if (loginEmail.isEmpty() || loginPassword.isEmpty()) {
+//            Toast.makeText(SignInActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
+//        } else {
+//            binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
+//
+//            auth.signInWithEmailAndPassword(loginEmail, loginPassword)
+//                    .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                            binding.progressBar.setVisibility(View.GONE); // Hide progress bar
+//
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(SignInActivity.this, "Login Successfully 😊", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                                startActivity(intent);
+//                                finish();
+//                            } else {
+//                                Toast.makeText(SignInActivity.this, "Login Failed. Please Enter Correct Details", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//        }
+//    }
+//}
+
 public class SignInActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
@@ -32,34 +114,22 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_sign_in);
-
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Initializing Firebase Auth
+        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
 
         setupUI();
     }
 
-    public void setupUI() {
+    private void setupUI() {
+        binding.registerBtn.setOnClickListener(v -> navigateToRegistration());
 
-        binding.registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToRegistration();
-            }
-        });
+        binding.loginBtn.setOnClickListener(v -> loginUser());
 
-        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginUser();
-            }
-        });
-
+        // Apply insets to adjust for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -71,7 +141,7 @@ public class SignInActivity extends AppCompatActivity {
         Intent register = new Intent(SignInActivity.this, RegisterActivity.class);
         startActivity(register);
         finish();
-        Toast.makeText(SignInActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
     }
 
     private void loginUser() {
@@ -79,26 +149,24 @@ public class SignInActivity extends AppCompatActivity {
         String loginPassword = binding.loginPasswordEt.getText().toString();
 
         if (loginEmail.isEmpty() || loginPassword.isEmpty()) {
-            Toast.makeText(SignInActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please fill all the details", Toast.LENGTH_SHORT).show();
         } else {
             binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
 
             auth.signInWithEmailAndPassword(loginEmail, loginPassword)
-                    .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            binding.progressBar.setVisibility(View.GONE); // Hide progress bar
+                    .addOnCompleteListener(this, task -> {
+                        binding.progressBar.setVisibility(View.GONE); // Hide progress bar
 
-                            if (task.isSuccessful()) {
-                                Toast.makeText(SignInActivity.this, "Login Successfully 😊", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(SignInActivity.this, "Login Failed. Please Enter Correct Details", Toast.LENGTH_SHORT).show();
-                            }
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Login successfully 😊", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(this, "Login failed. Please enter correct details", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
 }
+
