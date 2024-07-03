@@ -33,9 +33,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    // Enable View Binding
+    // Enable View Binding and Data Binding
     viewBinding {
         enable = true
+    }
+
+    buildFeatures {
+        dataBinding = true
     }
 }
 
@@ -47,8 +51,11 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
+    implementation(libs.circleprogressbar)
     testImplementation(libs.junit)
     implementation(libs.glide)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
+
+

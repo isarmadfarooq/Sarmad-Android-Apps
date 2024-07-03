@@ -16,7 +16,7 @@
             android:name=".register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".register.SignInActivity"
+            android:name=".register.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".register.WelcomeActivity"

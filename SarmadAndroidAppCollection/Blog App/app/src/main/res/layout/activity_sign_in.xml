@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".register.RegisterActivity">
+    tools:context=".register.LoginActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:text="@string/splash_main_txt"
             android:textColor="?attr/splashTextColor"
             android:textSize="50sp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/share_your_story"
@@ -53,14 +53,12 @@
             android:textColor="?attr/splashTextColor"
             android:textSize="38sp" />
 
-
-        <androidx.appcompat.widget.AppCompatEditText
+        <EditText
             android:id="@+id/login_mail_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/with_us"
             android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
             android:hint="@string/enter_your_email_et"
             android:background="@drawable/btn_background_stroke_red"
             android:textSize="20sp"
@@ -69,9 +67,9 @@
             android:gravity="center"
             android:textColorHint="?attr/splashTextColor"
             android:textColor="?attr/splashTextColor"
-            android:layout_marginTop="100dp"/>
+            android:layout_marginTop="100dp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <EditText
             android:id="@+id/login_password_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,8 +83,7 @@
             android:gravity="center"
             android:textColorHint="?attr/splashTextColor"
             android:textColor="?attr/splashTextColor"
-            android:layout_marginTop="20dp"/>
-
+            android:layout_marginTop="20dp" />
 
         <Button
             android:id="@+id/login_btn"
@@ -100,7 +97,7 @@
             android:background="@drawable/btn_background_stroke_red"
             android:textSize="20sp"
             android:fontFamily="@font/love_ya_like_a_sister"
-            android:textColor="?attr/splashTextColor"/>
+            android:textColor="?attr/splashTextColor" />
 
         <TextView
             android:id="@+id/new_here_txt"
@@ -112,7 +109,7 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/love_ya_like_a_sister"
             android:textColor="?attr/splashTextColor"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/register_btn"
@@ -127,13 +124,10 @@
             android:layout_marginTop="15dp"
             android:textSize="20sp"
             android:fontFamily="@font/love_ya_like_a_sister"
-            android:textColor="?attr/splashTextColor"/>
-
-
-
+            android:textColor="?attr/splashTextColor" />
 
         <TextView
-            android:id="@+id/deign_by"
+            android:id="@+id/design_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/design_by"
@@ -150,23 +144,34 @@
             android:layout_height="wrap_content"
             android:elevation="10dp"
             android:textSize="17sp"
-            android:layout_below="@id/deign_by"
+            android:layout_below="@id/design_by"
             android:textColor="?attr/splashTextColor"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/love_ya_like_a_sister"
             android:text="@string/sarmadtechempire" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:progress_style="line"
+            app:progress_stroke_width="1dp"
+            app:progress_start_color="@android:color/holo_purple"
+            app:progress_end_color="@android:color/holo_green_light"
+            app:progress_background_color="@android:color/darker_gray"
+            android:layout_below="@+id/login_password_et"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            app:progress_start_degree="-90"
             android:visibility="gone"
-            app:indicatorSize="48dp"
-            app:trackThickness="4dp"
-            app:indicatorColor="@android:color/darker_gray"
-            app:trackColor="@color/blue"/>
-
+            app:progress_text_size="0dp"
+            app:drawBackgroundOutsideProgress="true"
+            app:progress_shader="sweep"
+            app:progress_stroke_cap="round"
+            app:progress_blur_style="solid"
+            app:progress_blur_radius="5dp"
+            app:line_width="4dp"
+            app:line_count="30"/>
 
 
     </RelativeLayout>

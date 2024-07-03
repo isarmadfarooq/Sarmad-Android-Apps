@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sarmadtechempire.blogapp.register.RegisterActivity;
-import com.sarmadtechempire.blogapp.register.SignInActivity;
+import com.sarmadtechempire.blogapp.register.LoginActivity;
 import com.sarmadtechempire.blogapp.register.WelcomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
