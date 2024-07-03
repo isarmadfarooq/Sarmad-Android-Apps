@@ -79,4 +79,27 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/blog_items" />
 
+<!--    <com.dinuscxj.progressbar.CircleProgressBar-->
+<!--        android:id="@+id/circularProgressBar"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        app:progress_style="line"-->
+<!--        app:progress_stroke_width="1dp"-->
+<!--        app:progress_start_color="@android:color/holo_purple"-->
+<!--        app:progress_end_color="@android:color/holo_green_light"-->
+<!--        app:progress_background_color="@android:color/darker_gray"-->
+<!--        android:layout_below="@+id/search_blog"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        app:progress_start_degree="-90"-->
+<!--        app:progress_text_size="0dp"-->
+<!--        android:visibility="visible"-->
+<!--        app:drawBackgroundOutsideProgress="true"-->
+<!--        app:progress_shader="sweep"-->
+<!--        app:progress_stroke_cap="round"-->
+<!--        app:progress_blur_style="solid"-->
+<!--        app:progress_blur_radius="5dp"-->
+<!--        app:line_width="4dp"-->
+<!--        app:line_count="30" />-->
+
 </RelativeLayout>

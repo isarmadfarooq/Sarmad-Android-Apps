@@ -12,7 +12,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="50dp">
 
             <ImageView
@@ -127,7 +126,7 @@
                 android:id="@+id/login_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="60dp"
                 android:text="@string/login_btn_txt"
                 app:backgroundTint="@null"
                 android:layout_below="@id/registerPasswordEt"
@@ -232,16 +231,28 @@
             android:text="@string/sarmadtechempire" />
 
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:progress_style="line"
+            app:progress_stroke_width="1dp"
+            app:progress_start_color="@android:color/holo_purple"
+            app:progress_end_color="@android:color/holo_green_light"
+            app:progress_background_color="@android:color/darker_gray"
+            android:layout_below="@+id/registerPasswordEt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            app:progress_start_degree="-90"
             android:visibility="gone"
-            app:indicatorSize="48dp"
-            app:trackThickness="4dp"
-            app:indicatorColor="@android:color/darker_gray"
-            app:trackColor="@color/blue"/>
+            app:progress_text_size="0dp"
+            app:drawBackgroundOutsideProgress="true"
+            app:progress_shader="sweep"
+            app:progress_stroke_cap="round"
+            app:progress_blur_style="solid"
+            app:progress_blur_radius="5dp"
+            app:line_width="4dp"
+            app:line_count="30"/>
 
 
     </RelativeLayout>

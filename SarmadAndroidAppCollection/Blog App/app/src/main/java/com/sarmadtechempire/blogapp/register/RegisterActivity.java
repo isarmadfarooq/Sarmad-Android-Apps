@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void navigateToSignIn() {
-        Intent signIn = new Intent(RegisterActivity.this, SignInActivity.class);
+        Intent signIn = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(signIn);
         finish();
         Toast.makeText(RegisterActivity.this, "Welcome to login screen", Toast.LENGTH_SHORT).show();
@@ -104,13 +104,13 @@ public class RegisterActivity extends AppCompatActivity {
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(RegisterActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
         } else {
-            binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
+            binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
 
             auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            binding.progressBar.setVisibility(View.GONE); // Hide progress bar
+                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
 
                             if (task.isSuccessful()) {
                                 handleRegistrationSuccess();
