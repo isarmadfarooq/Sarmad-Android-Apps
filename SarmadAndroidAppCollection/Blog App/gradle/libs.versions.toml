@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+clansFab = "1.6.4"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -15,6 +16,7 @@ firebaseStorage = "21.0.0"
 circleprogressbar = "1.3.6"
 
 [libraries]
+clans-fab = { group = "com.github.clans", name = "fab", version.ref = "clansFab" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -27,7 +29,6 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 circleprogressbar = { group = "com.dinuscxj", name = "circleprogressbar", version.ref = "circleprogressbar" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
