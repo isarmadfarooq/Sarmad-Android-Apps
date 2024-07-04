@@ -81,7 +81,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_blog_float_btn"
+        android:id="@+id/add_article_float_action_btn"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:backgroundTint="@color/blue"

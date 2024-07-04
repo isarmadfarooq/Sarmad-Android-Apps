@@ -29,4 +29,12 @@
     <string name="blog_post_btn_readmore">Read more</string>
     <string name="like_counts_tv">200</string>
     <string name="add_blog_float_btn">add_blog_float_btn</string>
+    <string name="addarticlescreenbackground">addArticleScreenBackground</string>
+    <string name="backiconiv">backIconIv</string>
+    <string name="add_new_blog_here_main_title">Add New Blog here</string>
+    <string name="blog_title">Blog Title</string>
+    <string name="blog_description_tv">Blog Description</string>
+    <string name="blog_title_hint">Blog Title</string>
+    <string name="bolg_description_hint">Bolg Description</string>
+    <string name="add_blog_btn">Add Blog</string>
 </resources>
