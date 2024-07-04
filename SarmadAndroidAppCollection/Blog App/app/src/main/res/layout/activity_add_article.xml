@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddArticleActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessLeaf">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="850dp"
+            android:alpha="0.1"
+            android:contentDescription="@string/addarticlescreenbackground"
+            android:scaleType="centerCrop"
+            android:src="@drawable/rectangle_background"
+            app:tint="?attr/splashTextColor" />
+        
+        <ImageView
+            android:id="@+id/backIconIv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="32dp"
+            android:contentDescription="@string/backiconiv"
+            android:src="@drawable/back_icon"/>
+
+        <TextView
+            android:id="@+id/mainTitteTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/backIconIv"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            android:text="@string/add_new_blog_here_main_title"/>
+
+        <TextView
+            android:id="@+id/blog_title_Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mainTitteTv"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="32dp"
+            android:text="@string/blog_title"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="24sp"
+            android:fontFamily="@font/love_ya_like_a_sister"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/blogTitleTextIL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:textColorHint="?attr/splashTextColor"
+            android:layout_marginTop="12dp"
+            app:counterMaxLength="100"
+            app:counterEnabled="true"
+            android:layout_below="@+id/blog_title_Tv">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="?attr/splashTextColor"
+                android:textColor="@color/blue"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:hint="@string/blog_title_hint"
+                android:background="@drawable/btn_background_stroke_blue"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <TextView
+            android:id="@+id/blog_description_Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/blogTitleTextIL"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="32dp"
+            android:text="@string/blog_description_tv"
+            android:textColor="?attr/splashTextColor"
+            android:textSize="24sp"
+            android:fontFamily="@font/love_ya_like_a_sister"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/blog_descriptionTextIl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="?attr/splashTextColor"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/blog_description_Tv">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:textColor="?attr/splashTextColor"
+                android:hint="@string/bolg_description_hint"
+                android:fontFamily="@font/montserrat_light"
+                android:textColorHint="?attr/splashTextColor"
+                android:textSize="14sp"
+                android:gravity="top"
+                android:background="@drawable/btn_background_stroke_red"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/add_blog_btn"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/blog_descriptionTextIl"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/btn_background_stroke_blue"
+            android:elevation="10dp"
+            android:fontFamily="@font/montserrat_light"
+            android:text="@string/add_blog_btn"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/blue" />
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

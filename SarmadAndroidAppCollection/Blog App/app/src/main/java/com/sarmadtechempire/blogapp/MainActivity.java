@@ -1,7 +1,9 @@
 package com.sarmadtechempire.blogapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,15 @@ public class MainActivity extends AppCompatActivity {
         // Initialize view binding for the main activity layout
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.addArticleFloatActionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addArticleIntent = new Intent(MainActivity.this, AddArticleActivity.class);
+                startActivity(addArticleIntent);
+
+            }
+        });
 
 //        binding.circularProgressBar.setProgressFormatter(null);
 
