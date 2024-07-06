@@ -28,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.sarmadtechempire.blogapp.Model.UserData;
 import com.sarmadtechempire.blogapp.R;
 import com.sarmadtechempire.blogapp.databinding.ActivityRegisterBinding;
@@ -127,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (user != null) {
             DatabaseReference databaseReference = database.getReference("users");
             String userId = user.getUid();
-            UserData userData = new UserData(binding.registerNameEt.getText().toString(), binding.registerMailEt.getText().toString());
+            UserData userData = new UserData(binding.registerNameEt.getText().toString(), binding.registerMailEt.getText().toString(), null);
 
             databaseReference.child(userId).setValue(userData)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -152,20 +151,40 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void uploadProfileImage(String userId) {
-        StorageReference storageReference = storage.getReference().child("profile_image/" + userId + ".jpg");
-        storageReference.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        navigateToWelcome();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if (imageUri != null) {
+            StorageReference storageReference = storage.getReference().child("profile_image/" + userId + ".jpg");
+
+            storageReference.putFile(imageUri)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            storageReference.getDownloadUrl()
+                                    .addOnCompleteListener(uriTask -> {
+                                        if (uriTask.isSuccessful()) {
+                                            String imageUrl = uriTask.getResult().toString();
+                                            DatabaseReference userReference = database.getReference("users");
+                                            userReference.child(userId).child("profileImage").setValue(imageUrl)
+                                                    .addOnCompleteListener(imageUploadTask -> {
+                                                        if (imageUploadTask.isSuccessful()) {
+                                                            Glide.with(this)
+                                                                    .load(imageUri)
+                                                                    .apply(RequestOptions.circleCropTransform())
+                                                                    .into(binding.profileIv);
+                                                            navigateToWelcome();
+                                                        } else {
+                                                            Toast.makeText(RegisterActivity.this, "Failed to save image URL", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        } else {
+                                            Toast.makeText(RegisterActivity.this, "Failed to get image download URL", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            navigateToWelcome();
+        }
     }
 
     private void navigateToWelcome() {

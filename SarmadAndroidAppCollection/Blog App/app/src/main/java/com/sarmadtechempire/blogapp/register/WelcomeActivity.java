@@ -26,12 +26,12 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_welcome);
 
-        auth = FirebaseAuth.getInstance();
-
+        // Initializing View Binding
         binding = ActivityWelcomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        auth = FirebaseAuth.getInstance();
 
         onClick();
 
@@ -49,7 +49,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 Intent signIn = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(signIn);
                 finish();
-
                 Toast.makeText(WelcomeActivity.this, "Welcome to login screen", Toast.LENGTH_SHORT).show();
             }
         });
@@ -60,7 +59,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 Intent register = new Intent(WelcomeActivity.this, RegisterActivity.class);
                 startActivity(register);
                 finish();
-
                 Toast.makeText(WelcomeActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
             }
         });
@@ -69,7 +67,6 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
 
         FirebaseUser currentUser = auth.getCurrentUser();
