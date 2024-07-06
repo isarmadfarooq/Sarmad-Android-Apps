@@ -1,6 +1,8 @@
 package com.sarmadtechempire.blogapp.register;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -136,6 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (imageUri != null) {
                                 uploadProfileImage(userId);
                             } else {
+                                saveUserRegistrationStatus();
                                 navigateToWelcome();
                             }
                         }
@@ -169,6 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     .load(imageUri)
                                                                     .apply(RequestOptions.circleCropTransform())
                                                                     .into(binding.profileIv);
+                                                            saveUserRegistrationStatus();
                                                             navigateToWelcome();
                                                         } else {
                                                             Toast.makeText(RegisterActivity.this, "Failed to save image URL", Toast.LENGTH_SHORT).show();
@@ -183,8 +187,16 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         } else {
+            saveUserRegistrationStatus();
             navigateToWelcome();
         }
+    }
+
+    private void saveUserRegistrationStatus() {
+        SharedPreferences sharedPref = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("isRegistered", true);
+        editor.apply();
     }
 
     private void navigateToWelcome() {

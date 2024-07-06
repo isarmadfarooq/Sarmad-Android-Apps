@@ -33,16 +33,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        onClick();
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        setupUI();
     }
 
-    private void onClick() {
+    private void setupUI() {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,21 +56,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 Toast.makeText(WelcomeActivity.this, "Welcome to Register screen", Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
-
-        FirebaseUser currentUser = auth.getCurrentUser();
-
-        if (currentUser != null) {
-            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        binding.progressBar.setVisibility(View.GONE); // Hide progress bar
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 }
