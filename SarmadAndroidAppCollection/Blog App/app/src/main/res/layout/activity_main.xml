@@ -41,7 +41,7 @@
             android:id="@+id/profileIv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/profile1"
+            android:src="@drawable/profile5"
             android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 
