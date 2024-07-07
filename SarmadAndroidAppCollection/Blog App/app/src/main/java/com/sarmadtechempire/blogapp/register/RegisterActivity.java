@@ -1,19 +1,17 @@
 package com.sarmadtechempire.blogapp.register;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -45,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_register);
 
         // Initializing View Binding
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
@@ -79,12 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectProfileImage();
             }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
         });
     }
 
@@ -136,7 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                             if (imageUri != null) {
                                 uploadProfileImage(userId);
                             } else {
-                                navigateToWelcome();
+                                saveUserRegistrationStatus();
+                                navigateToWelcome(); // Navigate to WelcomeActivity
                             }
                         }
                     })
@@ -149,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
                     });
         }
     }
+
 
     private void uploadProfileImage(String userId) {
         if (imageUri != null) {
@@ -165,11 +159,12 @@ public class RegisterActivity extends AppCompatActivity {
                                             userReference.child(userId).child("profileImage").setValue(imageUrl)
                                                     .addOnCompleteListener(imageUploadTask -> {
                                                         if (imageUploadTask.isSuccessful()) {
-                                                            Glide.with(this)
+                                                            Glide.with(RegisterActivity.this)
                                                                     .load(imageUri)
                                                                     .apply(RequestOptions.circleCropTransform())
                                                                     .into(binding.profileIv);
-                                                            navigateToWelcome();
+                                                            saveUserRegistrationStatus(); // Save registration status
+                                                            navigateToWelcome(); // Navigate to WelcomeActivity
                                                         } else {
                                                             Toast.makeText(RegisterActivity.this, "Failed to save image URL", Toast.LENGTH_SHORT).show();
                                                         }
@@ -183,8 +178,16 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            navigateToWelcome();
+            saveUserRegistrationStatus(); // Save registration status
+            navigateToWelcome(); // Navigate to WelcomeActivity
         }
+    }
+
+    private void saveUserRegistrationStatus() {
+        SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("is_new_user", true); // Set the flag for a new user
+        editor.apply();
     }
 
     private void navigateToWelcome() {
@@ -193,7 +196,6 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
     private void selectProfileImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
