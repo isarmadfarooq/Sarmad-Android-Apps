@@ -1,6 +1,7 @@
 package com.sarmadtechempire.blogapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -12,55 +13,63 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sarmadtechempire.blogapp.databinding.ActivitySplashBinding;
 import com.sarmadtechempire.blogapp.register.WelcomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
+    private ActivitySplashBinding binding;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_splash);
 
+        // Initialize view binding
+        binding = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        // Initialize SharedPreferences
+        preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                navigateToNextScreen();
+            }
+        }, 4000);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Note: Since there is no progress bar in the splash screen layout, we are not showing/hiding it.
-
+    private void navigateToNextScreen() {
         FirebaseUser currentUser = auth.getCurrentUser();
+        boolean isNewUser = preferences.getBoolean("is_new_user", false);
+        Intent nextIntent;
 
-        if (currentUser != null) {
-            navigateToMainScreen();
+        if (isNewUser) {
+            // Navigate to Welcome Activity
+            nextIntent = new Intent(SplashActivity.this, WelcomeActivity.class);
+            // Clear the flag after first navigation to WelcomeActivity
+            preferences.edit().putBoolean("is_new_user", false).apply();
+        } else if (currentUser != null) {
+            // User is signed in, navigate to Main Activity
+            nextIntent = new Intent(SplashActivity.this, MainActivity.class);
         } else {
-            navigateToWelcomeScreen();
+            // No user is signed in, navigate to Welcome Activity
+            nextIntent = new Intent(SplashActivity.this, WelcomeActivity.class);
         }
-    }
 
-    private void navigateToMainScreen() {
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
+        startActivity(nextIntent);
         finish();
-    }
-
-    private void navigateToWelcomeScreen() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent iHome = new Intent(SplashActivity.this, WelcomeActivity.class);
-                startActivity(iHome);
-                finish();
-            }
-        }, 4000); // Splash screen duration
     }
 }

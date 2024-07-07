@@ -12,8 +12,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.sarmadtechempire.blogapp.MainActivity;
 import com.sarmadtechempire.blogapp.R;
 import com.sarmadtechempire.blogapp.databinding.ActivityWelcomeBinding;
 
@@ -63,4 +61,7 @@ public class WelcomeActivity extends AppCompatActivity {
             return insets;
         });
     }
+
 }
+
+
