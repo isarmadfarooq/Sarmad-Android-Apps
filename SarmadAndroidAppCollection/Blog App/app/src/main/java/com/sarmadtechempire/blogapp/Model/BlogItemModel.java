@@ -6,8 +6,13 @@ public class BlogItemModel {
     private String userName;
     private String date;
     private String post;
-    private int likeCount = 0;
+    private int likeCount;
     private String imageUrl;
+
+    // No-argument constructor
+    public BlogItemModel() {
+        // Required for Firebase deserialization
+    }
 
     public BlogItemModel(String heading, String userName, String date, String post, int likeCount, String imageUrl) {
         this.heading = heading != null ? heading : "";
@@ -67,5 +72,4 @@ public class BlogItemModel {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
 }

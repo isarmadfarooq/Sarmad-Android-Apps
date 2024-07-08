@@ -1,6 +1,7 @@
 package com.sarmadtechempire.blogapp.register;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private FirebaseAuth auth;
     private ActivitySignInBinding binding;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +29,14 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //Hide the progress text
-        binding.circularProgressBar.setProgressFormatter(null);
-
-        // Initializing Firebase Auth
+        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
+
+        // Initialize SharedPreferences
+        preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+
+        // Hide the progress text
+        binding.circularProgressBar.setProgressFormatter(null);
 
         setupUI();
     }
@@ -84,14 +89,20 @@ public class LoginActivity extends AppCompatActivity {
     private void handleLoginSuccess() {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
-            navigateToMain();
+            onLoginSuccess();
         }
     }
 
-    private void navigateToMain() {
-        Toast.makeText(LoginActivity.this, "Login Successful 😊", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+    private void onLoginSuccess() {
+        // Update SharedPreferences to indicate the user has logged in
+        preferences.edit()
+                .putBoolean("is_logged_in", true)
+                .putBoolean("is_new_user", false)
+                .apply();
+
+        // Navigate to Main Activity
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainIntent);
         finish();
     }
 

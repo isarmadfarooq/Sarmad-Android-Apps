@@ -3,8 +3,12 @@ package com.sarmadtechempire.blogapp.register;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -40,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Uri imageUri = null;
     private ActivityRegisterBinding binding;
 
+    private static final int REGISTRATION_TIMEOUT = 30000; // 30 seconds
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
         storage = FirebaseStorage.getInstance();
+
 
         setupUI();
     }
@@ -94,13 +101,30 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(RegisterActivity.this, "Please Fill All The Details", Toast.LENGTH_SHORT).show();
+        } else if (!isConnectedToInternet()) {
+            Toast.makeText(RegisterActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
             binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
+
+            // Handler for low internet speed
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                if (binding.circularProgressBar.getVisibility() == View.VISIBLE) {
+                    Toast.makeText(RegisterActivity.this, "Low Internet Speed, It may take time to register", Toast.LENGTH_SHORT).show();
+                }
+            }, REGISTRATION_TIMEOUT);
+
+            long startTime = System.currentTimeMillis(); // Log start time
+            Log.d("Registration", "Registration started at: " + startTime);
 
             auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            long endTime = System.currentTimeMillis(); // Log end time
+                            Log.d("Registration", "Registration completed at: " + endTime);
+                            Log.d("Registration", "Total time taken: " + (endTime - startTime) + " ms");
+
                             binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
 
                             if (task.isSuccessful()) {
@@ -113,6 +137,26 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+
+    private boolean isConnectedToInternet() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+                if (capabilities != null) {
+                    if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        return true;
+                    }
+                }
+            } else {
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null && activeNetwork.isConnected()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     private void handleRegistrationSuccess() {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
@@ -120,11 +164,18 @@ public class RegisterActivity extends AppCompatActivity {
             String userId = user.getUid();
             UserData userData = new UserData(binding.registerNameEt.getText().toString(), binding.registerMailEt.getText().toString(), null);
 
+            binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
+            long startTime = System.currentTimeMillis(); // Log start time
+            Log.d("Registration", "Saving user data started at: " + startTime);
+
             databaseReference.child(userId).setValue(userData)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d("TAG", "User data saved successfully");
+                            long endTime = System.currentTimeMillis(); // Log end time
+                            Log.d("Registration", "User data saved at: " + endTime);
+                            Log.d("Registration", "Time taken to save user data: " + (endTime - startTime) + " ms");
+
                             if (imageUri != null) {
                                 uploadProfileImage(userId);
                             } else {
@@ -136,6 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
                             Log.e("TAG", "Error saving user data: " + e.getMessage());
                             Toast.makeText(RegisterActivity.this, "Error saving user data", Toast.LENGTH_SHORT).show();
                         }
@@ -143,13 +195,19 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
     private void uploadProfileImage(String userId) {
         if (imageUri != null) {
             StorageReference storageReference = storage.getReference().child("profile_image/" + userId + ".jpg");
 
+            long startTime = System.currentTimeMillis(); // Log start time
+            Log.d("Registration", "Profile image upload started at: " + startTime);
+
             storageReference.putFile(imageUri)
                     .addOnCompleteListener(task -> {
+                        long endTime = System.currentTimeMillis(); // Log end time
+                        Log.d("Registration", "Profile image uploaded at: " + endTime);
+                        Log.d("Registration", "Time taken to upload profile image: " + (endTime - startTime) + " ms");
+
                         if (task.isSuccessful()) {
                             storageReference.getDownloadUrl()
                                     .addOnCompleteListener(uriTask -> {
@@ -166,14 +224,17 @@ public class RegisterActivity extends AppCompatActivity {
                                                             saveUserRegistrationStatus(); // Save registration status
                                                             navigateToWelcome(); // Navigate to WelcomeActivity
                                                         } else {
+                                                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
                                                             Toast.makeText(RegisterActivity.this, "Failed to save image URL", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
                                         } else {
+                                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
                                             Toast.makeText(RegisterActivity.this, "Failed to get image download URL", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } else {
+                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
                             Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -192,10 +253,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void navigateToWelcome() {
         Toast.makeText(RegisterActivity.this, "User Registered Successfully 😊", Toast.LENGTH_SHORT).show();
+        binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
         Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
         startActivity(intent);
         finish();
     }
+
+
     private void selectProfileImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
