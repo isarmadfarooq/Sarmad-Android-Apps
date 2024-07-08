@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Background Image -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,11 +16,12 @@
         android:scaleType="centerCrop"
         android:src="@drawable/rectangle_background" />
 
+    <!-- New Feeds TextView -->
     <TextView
         android:id="@+id/new_feeds_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="18dp"
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/new_feeds_tv"
@@ -27,13 +29,14 @@
         android:textSize="17sp"
         android:textStyle="bold" />
 
+    <!-- User Profile ImageView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/userProfileCv"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_marginTop="12dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="25dp"
         app:cardCornerRadius="100dp"
         app:cardBackgroundColor="@android:color/transparent">
 
@@ -45,57 +48,63 @@
             android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 
+    <!-- Save Article Button ImageView -->
     <ImageView
         android:id="@+id/save_article_btn"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:contentDescription="@string/save_article_btn"
-        android:src="@drawable/post_icon_red"
         android:layout_toStartOf="@id/userProfileCv"
-        android:layout_marginEnd="40dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginEnd="35dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/save_article_btn"
+        android:src="@drawable/post_icon_red"/>
 
+    <!-- SearchView -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_blog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/new_feeds_tv"
         android:layout_marginTop="24dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="33dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/search_view_bg"
         app:queryHint="@string/search_view_hint_text"
         app:iconifiedByDefault="false"
-        android:background="@drawable/search_view_bg"
         app:searchIcon="@drawable/search"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/blog_rv"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginEnd="33dp"
+        android:layout_height="match_parent"
         android:layout_below="@id/search_blog"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/blog_items" />
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/blog_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/blog_items"/>
+
+    </FrameLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_article_float_action_btn"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:backgroundTint="@color/blue"
-        app:borderWidth="2dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        app:shapeAppearanceOverlay="@style/round"
         android:layout_margin="32dp"
         android:contentDescription="@string/add_blog_float_btn"
-        android:focusable="true"
-        android:backgroundTint="@color/blue"
+        android:src="@drawable/add_icon_white"
+        app:backgroundTint="@color/blue"
+        app:borderWidth="2dp"
         app:fabSize="normal"
-        app:tint="@color/white"
-        tools:ignore="KeyboardInaccessibleWidget"
-        android:src="@drawable/add_icon_white"/>
+        app:shapeAppearanceOverlay="@style/round"
+        app:tint="@color/white" />
 
 </RelativeLayout>

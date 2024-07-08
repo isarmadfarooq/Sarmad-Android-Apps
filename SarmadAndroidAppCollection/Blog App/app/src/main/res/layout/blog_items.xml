@@ -15,15 +15,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/barrierCl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp">
+            android:layout_width="240dp"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/blog_heading_text"
-                android:layout_width="220dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:textSize="16sp"
                 android:textColor="@color/blue"
                 android:layout_marginStart="9dp"
@@ -61,13 +60,12 @@
                     android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
             android:id="@+id/blogger_name_tv"
-            android:layout_width="90dp"
+            android:layout_width="70dp"
             android:layout_height="44dp"
             android:layout_alignParentEnd="true"
             android:textSize="12sp"
@@ -125,8 +123,8 @@
 
         <Button
             android:id="@+id/blog_post_btn"
-            android:layout_width="160dp"
-            android:layout_height="48dp"
+            android:layout_width="140dp"
+            android:layout_height="44dp"
             android:layout_below="@id/blog_column_tv"
             android:layout_marginStart="9dp"
             android:layout_marginTop="20dp"
