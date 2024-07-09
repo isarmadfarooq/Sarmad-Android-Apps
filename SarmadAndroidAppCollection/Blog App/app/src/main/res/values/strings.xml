@@ -37,4 +37,6 @@
     <string name="blog_title_hint">Blog Title</string>
     <string name="bolg_description_hint">Bolg Description</string>
     <string name="add_blog_btn">Add Blog</string>
+    <string name="default_web_client_id">1046734747211-tr1pv2lb88093d25bu9d9ba4hup6mcmt.apps.googleusercontent.com</string>
+    <string name="reset_password">Reset Password</string>
 </resources>

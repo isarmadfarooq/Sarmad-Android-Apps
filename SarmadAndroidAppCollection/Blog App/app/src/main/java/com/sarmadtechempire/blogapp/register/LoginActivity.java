@@ -57,6 +57,20 @@ public class LoginActivity extends AppCompatActivity {
                 navigateToRegister();
             }
         });
+
+        binding.forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to ForgotPasswordActivity
+                navigateToForgotPasswordActivity();
+            }
+        });
+    }
+
+    private void navigateToForgotPasswordActivity() {
+        Intent register = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+        startActivity(register);
+        finish();
     }
 
     private void loginUser() {
@@ -76,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "Login successful");
+                                saveUserLoginStatus();
                                 handleLoginSuccess();
                             } else {
                                 Log.d(TAG, "Login failed: " + task.getException().getMessage());
@@ -104,6 +119,14 @@ public class LoginActivity extends AppCompatActivity {
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(mainIntent);
         finish();
+    }
+
+    // For if user Logged in with  Google_Auth then no need of login
+    private void saveUserLoginStatus() {
+        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("is_logged_in", true);
+        editor.apply();
     }
 
     private void navigateToRegister() {
