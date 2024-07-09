@@ -19,17 +19,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.sarmadtechempire.blogapp.MainActivity;
 import com.sarmadtechempire.blogapp.Model.UserData;
 import com.sarmadtechempire.blogapp.R;
 import com.sarmadtechempire.blogapp.databinding.ActivityRegisterBinding;
@@ -39,12 +48,16 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
+    private GoogleSignInClient mGoogleSignInClient;
+    private int RC_SIGN_IN = 20;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri = null;
     private ActivityRegisterBinding binding;
 
     private static final int REGISTRATION_TIMEOUT = 30000; // 30 seconds
+
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +73,14 @@ public class RegisterActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
         storage = FirebaseStorage.getInstance();
 
+        preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         setupUI();
     }
@@ -85,6 +106,86 @@ public class RegisterActivity extends AppCompatActivity {
                 selectProfileImage();
             }
         });
+
+        binding.googleRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                googleAuth();
+            }
+        });
+    }
+
+    private void googleAuth() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
+                Toast.makeText(this, "Google sign in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            Glide.with(this)
+                    .load(imageUri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.profileIv);
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            binding.circularProgressBar.setVisibility(View.GONE);
+
+                            FirebaseUser user = auth.getCurrentUser();
+                            if (user != null) {
+                                String name = user.getDisplayName();
+                                String email = user.getEmail();
+                                String profileImage = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
+                                UserData userData = new UserData(name, email, profileImage);
+                                DatabaseReference databaseReference = database.getReference("users");
+                                String userId = user.getUid();
+                                databaseReference.child(userId).setValue(userData);
+                                // Set is_new_user flag
+                                preferences.edit()
+                                        .putBoolean("is_logged_in", true)
+                                        .putBoolean("is_new_user", true)
+                                        .apply();
+                                saveUserLoginStatus();
+                                navigateToMainScreen();
+                                finish();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void navigateToMainScreen() {
+            Intent mainScreen = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(mainScreen);
+            finish();
+            Toast.makeText(RegisterActivity.this, "Welcome to Main screen", Toast.LENGTH_SHORT).show();
     }
 
     private void navigateToSignIn() {
@@ -137,7 +238,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
     private boolean isConnectedToInternet() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
@@ -157,6 +257,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return false;
     }
+
     private void handleRegistrationSuccess() {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
@@ -166,118 +267,101 @@ public class RegisterActivity extends AppCompatActivity {
 
             binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
             long startTime = System.currentTimeMillis(); // Log start time
-            Log.d("Registration", "Saving user data started at: " + startTime);
+            Log.d("Registration", "Data storage started at: " + startTime);
 
             databaseReference.child(userId).setValue(userData)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
+                        public void onComplete(@NonNull Task<Void> task) {
                             long endTime = System.currentTimeMillis(); // Log end time
-                            Log.d("Registration", "User data saved at: " + endTime);
-                            Log.d("Registration", "Time taken to save user data: " + (endTime - startTime) + " ms");
+                            Log.d("Registration", "Data storage completed at: " + endTime);
+                            Log.d("Registration", "Total time taken for data storage: " + (endTime - startTime) + " ms");
 
-                            if (imageUri != null) {
-                                uploadProfileImage(userId);
+                            if (task.isSuccessful()) {
+                                if (imageUri != null) {
+                                    uploadProfileImage(userId, userData);
+                                } else {
+                                    navigateToWelcome();
+                                    Toast.makeText(RegisterActivity.this, "Welcome to welcome screen", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
                             } else {
-                                saveUserRegistrationStatus();
-                                navigateToWelcome(); // Navigate to WelcomeActivity
+                                binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
+                                Toast.makeText(RegisterActivity.this, "Data storage failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
-                            Log.e("TAG", "Error saving user data: " + e.getMessage());
-                            Toast.makeText(RegisterActivity.this, "Error saving user data", Toast.LENGTH_SHORT).show();
-                        }
                     });
         }
     }
 
-    private void uploadProfileImage(String userId) {
-        if (imageUri != null) {
-            StorageReference storageReference = storage.getReference().child("profile_image/" + userId + ".jpg");
+    private void uploadProfileImage(String userId, UserData userData) {
+        StorageReference storageReference = storage.getReference().child("profileImages").child(userId);
 
-            long startTime = System.currentTimeMillis(); // Log start time
-            Log.d("Registration", "Profile image upload started at: " + startTime);
+        long startTime = System.currentTimeMillis(); // Log start time
+        Log.d("Registration", "Image upload started at: " + startTime);
 
-            storageReference.putFile(imageUri)
-                    .addOnCompleteListener(task -> {
-                        long endTime = System.currentTimeMillis(); // Log end time
-                        Log.d("Registration", "Profile image uploaded at: " + endTime);
-                        Log.d("Registration", "Time taken to upload profile image: " + (endTime - startTime) + " ms");
-
+        storageReference.putFile(imageUri)
+                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
-                            storageReference.getDownloadUrl()
-                                    .addOnCompleteListener(uriTask -> {
-                                        if (uriTask.isSuccessful()) {
-                                            String imageUrl = uriTask.getResult().toString();
-                                            DatabaseReference userReference = database.getReference("users");
-                                            userReference.child(userId).child("profileImage").setValue(imageUrl)
-                                                    .addOnCompleteListener(imageUploadTask -> {
-                                                        if (imageUploadTask.isSuccessful()) {
-                                                            Glide.with(RegisterActivity.this)
-                                                                    .load(imageUri)
-                                                                    .apply(RequestOptions.circleCropTransform())
-                                                                    .into(binding.profileIv);
-                                                            saveUserRegistrationStatus(); // Save registration status
-                                                            navigateToWelcome(); // Navigate to WelcomeActivity
-                                                        } else {
-                                                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
-                                                            Toast.makeText(RegisterActivity.this, "Failed to save image URL", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                        } else {
-                                            binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
-                                            Toast.makeText(RegisterActivity.this, "Failed to get image download URL", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    long endTime = System.currentTimeMillis(); // Log end time
+                                    Log.d("Registration", "Image upload completed at: " + endTime);
+                                    Log.d("Registration", "Total time taken for image upload: " + (endTime - startTime) + " ms");
+
+                                    userData.setProfileImage(uri.toString());
+                                    DatabaseReference databaseReference = database.getReference("users");
+                                    databaseReference.child(userId).setValue(userData)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
+                                                    if (task.isSuccessful()) {
+                                                        navigateToWelcome();
+                                                        Toast.makeText(RegisterActivity.this, "Welcome to welcome screen", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(RegisterActivity.this, "Failed to save profile image URL: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
+                                    Toast.makeText(RegisterActivity.this, "Failed to get profile image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         } else {
                             binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
-                            Toast.makeText(RegisterActivity.this, "Image Upload Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Failed to upload profile image: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    });
-        } else {
-            saveUserRegistrationStatus(); // Save registration status
-            navigateToWelcome(); // Navigate to WelcomeActivity
-        }
+                    }
+                });
     }
-
-    private void saveUserRegistrationStatus() {
-        SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("is_new_user", true); // Set the flag for a new user
-        editor.apply();
-    }
-
-    private void navigateToWelcome() {
-        Toast.makeText(RegisterActivity.this, "User Registered Successfully 😊", Toast.LENGTH_SHORT).show();
-        binding.circularProgressBar.setVisibility(View.GONE); // Hide progress bar
-        Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
 
     private void selectProfileImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void saveUserLoginStatus() {
+        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("is_logged_in", true);
+        editor.putBoolean("is_new_user", false); // Assuming Google registration means the user is not new
+        editor.apply();
+    }
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-
-            Glide.with(this)
-                    .load(imageUri)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(binding.profileIv);
-        }
+    private void navigateToWelcome() {
+        Intent welcome = new Intent(RegisterActivity.this, WelcomeActivity.class);
+        startActivity(welcome);
+        finish();
     }
 }

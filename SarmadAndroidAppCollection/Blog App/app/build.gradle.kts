@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
     implementation(libs.circleprogressbar)
+    // Import the BoM for the Firebase platform
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.play.services.auth)
     testImplementation(libs.junit)
     implementation(libs.glide)
     androidTestImplementation(libs.ext.junit)
