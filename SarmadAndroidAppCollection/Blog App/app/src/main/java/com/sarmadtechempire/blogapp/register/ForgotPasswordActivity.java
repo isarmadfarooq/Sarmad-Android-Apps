@@ -41,11 +41,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
                 }
+                binding.circularProgressBar.setVisibility(View.VISIBLE);
 
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+
+                                binding.circularProgressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     Toast.makeText(ForgotPasswordActivity.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
                                     finish();
