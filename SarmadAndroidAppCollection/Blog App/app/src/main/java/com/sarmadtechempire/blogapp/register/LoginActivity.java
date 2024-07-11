@@ -13,6 +13,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sarmadtechempire.blogapp.MainActivity;
 import com.sarmadtechempire.blogapp.databinding.ActivitySignInBinding;
 
@@ -115,10 +118,31 @@ public class LoginActivity extends AppCompatActivity {
                 .putBoolean("is_new_user", false)
                 .apply();
 
+        saveUserFCMToken();
+
         // Navigate to Main Activity
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(mainIntent);
         finish();
+    }
+
+    private void saveUserFCMToken() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM token failed", task.getException());
+                        return;
+                    }
+                    String token = task.getResult();
+                    DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
+                    tokensRef.child(userId).setValue(token);
+                }
+            });
+        }
     }
 
     // For if user Logged in with  Google_Auth then no need of login

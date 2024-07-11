@@ -1,5 +1,7 @@
 package com.sarmadtechempire.blogapp.register;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +37,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.Tag;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -278,6 +282,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d("Registration", "Total time taken for data storage: " + (endTime - startTime) + " ms");
 
                             if (task.isSuccessful()) {
+                                saveUserFCMToken();
                                 if (imageUri != null) {
                                     uploadProfileImage(userId, userData);
                                 } else {
@@ -291,6 +296,29 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         }
                     });
+        }
+    }
+
+    private void saveUserFCMToken() {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null)
+        {
+            String userId = user.getUid();
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if(!task.isSuccessful())
+                    {
+                        Log.w(TAG, "Fetching FCM token failed", task.getException());
+                        return;
+                    }
+                    String token = task.getResult();
+                    DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
+                    tokensRef.child(userId).setValue(token);
+
+                }
+            });
         }
     }
 

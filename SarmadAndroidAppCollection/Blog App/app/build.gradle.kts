@@ -33,13 +33,20 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    // Enable View Binding and Data Binding
     viewBinding {
         enable = true
     }
 
     buildFeatures {
         dataBinding = true
+    }
+
+    packagingOptions {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/LICENSE"
+        }
     }
 }
 
@@ -56,10 +63,12 @@ dependencies {
     // Import the BoM for the Firebase platform
     implementation(platform(libs.firebase.bom))
     implementation(libs.play.services.auth)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.analytics)
     testImplementation(libs.junit)
     implementation(libs.glide)
+    implementation(libs.volley)
+    implementation(libs.google.google.auth.library.oauth2.http)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
-
-
