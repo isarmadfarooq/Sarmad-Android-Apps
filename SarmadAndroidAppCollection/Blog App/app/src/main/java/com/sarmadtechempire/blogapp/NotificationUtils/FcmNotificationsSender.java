@@ -76,6 +76,7 @@ package com.sarmadtechempire.blogapp.NotificationUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -93,6 +94,7 @@ import java.util.Map;
 
 public class FcmNotificationsSender {
 
+    private static final String TAG = "FcmNotificationsSender";
     private String userFcmToken;
     private String title;
     private String body;
@@ -122,21 +124,20 @@ public class FcmNotificationsSender {
                 notificationObj.put("image", imageUrl);
             }
 
-            JSONObject messageObj = new JSONObject();
-            messageObj.put("notification", notificationObj);
-            messageObj.put("to", userFcmToken);
+            mainObj.put("notification", notificationObj);
+            mainObj.put("to", userFcmToken);
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, messageObj,
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            // Handle success response
+                            Log.d(TAG, "Notification sent successfully: " + response.toString());
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // Handle error response
+                            Log.e(TAG, "Error sending notification: " + error.toString());
                         }
                     }) {
                 @Override
@@ -146,7 +147,7 @@ public class FcmNotificationsSender {
                     try {
                         headers.put("Authorization", "Bearer " + getAccessToken());
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "Error getting access token: " + e.toString());
                     }
                     return headers;
                 }
@@ -155,7 +156,7 @@ public class FcmNotificationsSender {
             requestQueue.add(request);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error creating notification JSON: " + e.toString());
         }
     }
 
@@ -164,6 +165,8 @@ public class FcmNotificationsSender {
         GoogleCredentials googleCredentials = GoogleCredentials.fromStream(serviceAccount)
                 .createScoped("https://www.googleapis.com/auth/firebase.messaging");
         googleCredentials.refresh();
-        return googleCredentials.getAccessToken().getTokenValue();
+        String token = googleCredentials.getAccessToken().getTokenValue();
+        Log.d(TAG, "Access token: " + token);
+        return token;
     }
 }

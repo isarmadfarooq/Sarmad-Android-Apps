@@ -1,23 +1,26 @@
 package com.sarmadtechempire.blogapp.register;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.AuthResult;
 import com.sarmadtechempire.blogapp.MainActivity;
 import com.sarmadtechempire.blogapp.databinding.ActivitySignInBinding;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -126,24 +129,33 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private void saveUserFCMToken() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String userId = user.getUid();
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "Fetching FCM token failed", task.getException());
-                        return;
-                    }
-                    String token = task.getResult();
-                    DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
-                    tokensRef.child(userId).setValue(token);
+private void saveUserFCMToken() {
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    if (user != null) {
+        String userId = user.getUid();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM token failed", task.getException());
+                    return;
                 }
-            });
-        }
+                String token = task.getResult();
+                DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
+                tokensRef.child(userId).setValue(token).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "FCM token saved successfully");
+                        } else {
+                            Log.w(TAG, "Failed to save FCM token", task.getException());
+                        }
+                    }
+                });
+            }
+        });
     }
+}
 
     // For if user Logged in with  Google_Auth then no need of login
     private void saveUserLoginStatus() {
