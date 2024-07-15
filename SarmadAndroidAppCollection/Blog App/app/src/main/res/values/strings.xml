@@ -39,4 +39,7 @@
     <string name="add_blog_btn">Add Blog</string>
     <string name="default_web_client_id">1046734747211-tr1pv2lb88093d25bu9d9ba4hup6mcmt.apps.googleusercontent.com</string>
     <string name="reset_password">Reset Password</string>
+    <string name="read_more_activity_Title">Please Start Writing Better Git Commits</string>
+    <string name="user_name">Sarmad Farooq</string>
+    <string name="blog_description">I recently read a helpful article on Hashnode by Simon Egersand titled Write Git Commit Messages Your Colleagues Will Love, and it inspired me to dive a little deeper into understanding what makes a Git commit good or bad. You\'re probably thinking to yourself, my commits are just fine, thank you. But are they really? Let\'s take a closer look. Why Are Good Commits Important? Git commits are like little snapshots of your code. They let you and others see what changes were made, and when. They also let you roll back those changes when something inevitably goes wrong. That\'s why it\'s important to make sure your git commits are as clear and concise as possible. Otherwise, you run the risk of confusing yourself and others down the road. The Problem With Your Current Commits There are three main problems I find with many commits: They\'re not informative enough. They\'re not helpful to others. You\'re putting too many changes in one commit. Not Enough Information These commits are essentially worthless. You know the ones I\'m talking about - they just say updated or fixed bug or</string>
 </resources>

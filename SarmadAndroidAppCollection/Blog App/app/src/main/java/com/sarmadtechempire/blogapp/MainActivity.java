@@ -26,6 +26,7 @@ import com.sarmadtechempire.blogapp.adapter.BlogAdapter;
 import com.sarmadtechempire.blogapp.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the recycler view and set adapter
         RecyclerView recyclerView = binding.blogRv;
-        BlogAdapter blogAdapter = new BlogAdapter(blogItemModel);
+        BlogAdapter blogAdapter = new BlogAdapter(this, blogItemModel);
         recyclerView.setAdapter(blogAdapter);
 
         // Fetch data from Firebase Database
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                         blogItemModel.add(blogItem);
                     }
                 }
+                // reverse the list
+                Collections.reverse(blogItemModel);
                 // Notify the adapter that data has changed
                 blogAdapter.notifyDataSetChanged();
             }
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent addArticleIntent = new Intent(MainActivity.this, AddArticleActivity.class);
                 startActivity(addArticleIntent);
+                finish();
             }
         });
 
@@ -118,5 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Failed to load user profile image", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 }

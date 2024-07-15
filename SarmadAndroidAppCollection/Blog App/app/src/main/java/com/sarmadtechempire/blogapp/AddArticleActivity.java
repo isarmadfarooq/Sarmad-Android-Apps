@@ -147,7 +147,9 @@
 //}
 package com.sarmadtechempire.blogapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -167,11 +169,15 @@ import com.sarmadtechempire.blogapp.Model.BlogItemModel;
 import com.sarmadtechempire.blogapp.Model.UserData;
 import com.sarmadtechempire.blogapp.NotificationUtils.FcmNotificationsSender;
 import com.sarmadtechempire.blogapp.databinding.ActivityAddArticleBinding;
+import com.sarmadtechempire.blogapp.register.RegisterActivity;
+import com.sarmadtechempire.blogapp.register.WelcomeActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AddArticleActivity extends AppCompatActivity {
+
+    private static final String TAG = "AddArticleActivity";
 
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
     DatabaseReference databaseReference = database.getReference("blogs");
@@ -186,9 +192,19 @@ public class AddArticleActivity extends AppCompatActivity {
         binding = ActivityAddArticleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.backIconIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToMain();
+            }
+        });
+
         binding.addBlogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
+                long startTime = System.currentTimeMillis();
                 String title = binding.blogTitleTextIL.getEditText().getText().toString().trim();
                 String description = binding.blogDescriptionTextIl.getEditText().getText().toString().trim();
 
@@ -200,71 +216,83 @@ public class AddArticleActivity extends AppCompatActivity {
                 FirebaseUser user = auth.getCurrentUser();
                 if (user != null) {
                     String userId = user.getUid();
-                    String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    String userName = user.getDisplayName() != null ? user.getDisplayName() : "Anonymous";
+                    String userImageUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "";
 
                     userReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             UserData userData = snapshot.getValue(UserData.class);
                             if (userData != null) {
-                                String userName = userData.getName();
-                                String userImageUrl = userData.getProfileImage();
+                                String userNameFromDb = userData.getName();
+                                String userImageUrlFromDb = userData.getProfileImage();
+                                String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-                                BlogItemModel blogItem = new BlogItemModel(
-                                        title,
-                                        userName != null ? userName : "",
-                                        currentDate,
-                                        description,
-                                        0,
-                                        userImageUrl != null ? userImageUrl : ""
-                                );
-
+                                BlogItemModel blogItemModel = new BlogItemModel(userId, userImageUrlFromDb, title, description, currentDate, userNameFromDb);
                                 String key = databaseReference.push().getKey();
                                 if (key != null) {
-                                    databaseReference.child(key).setValue(blogItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    databaseReference.child(key).setValue(blogItemModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                sendNotificationToAllUsers(title, description, userName, userImageUrl);
-                                                finish();
+                                                Log.d(TAG, "Blog added successfully");
+                                                Toast.makeText(AddArticleActivity.this, "Blog Added Successfully", Toast.LENGTH_SHORT).show();
+                                                sendNotificationToAllUsers(userNameFromDb, title, description, userImageUrlFromDb);
+                                                navigateToMain();
+                                                binding.circularProgressBar.setVisibility(View.GONE);
                                             } else {
-                                                Toast.makeText(AddArticleActivity.this, "Failed to save blog", Toast.LENGTH_SHORT).show();
+                                                Log.e(TAG, "Error adding blog: " + task.getException());
+                                                Toast.makeText(AddArticleActivity.this, "Error Adding Blog", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
+                                } else {
+                                    Log.e(TAG, "Blog key is null");
                                 }
+                            } else {
+                                Log.e(TAG, "UserData is null");
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e(TAG, "Error fetching user data: " + error.toException());
                         }
                     });
+                } else {
+                    Log.e(TAG, "No authenticated user found");
                 }
             }
         });
     }
 
-    private void sendNotificationToAllUsers(String title, String description, String userName, String userImageUrl) {
-        String message = "New post by " + userName + ": " + description;
-
+    private void sendNotificationToAllUsers(String userName, String title, String description, String imageUrl) {
         tokensReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot tokenSnapshot : snapshot.getChildren()) {
-                    String token = tokenSnapshot.getValue(String.class);
-                    if (token != null) {
-                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender(
-                                token, title, message, userImageUrl, AddArticleActivity.this, AddArticleActivity.this
-                        );
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String userToken = dataSnapshot.getValue(String.class);
+                    if (userToken != null && !userToken.isEmpty()) {
+                        Log.d(TAG, "Sending notification to token: " + userToken);
+                        String notificationBody = userName + " added a new blog: " + title;
+                        FcmNotificationsSender notificationsSender = new FcmNotificationsSender(userToken, title, notificationBody, imageUrl, getApplicationContext(), AddArticleActivity.this);
                         notificationsSender.sendNotification();
+                    } else {
+                        Log.e(TAG, "User token is null or empty");
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error fetching tokens: " + error.toException());
             }
         });
+    }
+
+    private void navigateToMain() {
+        Intent welcome = new Intent(AddArticleActivity.this, MainActivity.class);
+        startActivity(welcome);
+        finish();
     }
 }

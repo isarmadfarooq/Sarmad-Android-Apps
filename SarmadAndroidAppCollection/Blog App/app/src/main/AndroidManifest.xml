@@ -17,6 +17,9 @@
         android:theme="@style/Theme.BlogApp"
         tools:targetApi="31">
         <activity
+            android:name=".ReadMoreActivity"
+            android:exported="false" />
+        <activity
             android:name=".register.ForgotPasswordActivity"
             android:exported="false" />
         <activity
@@ -46,12 +49,11 @@
 
         <service
             android:name=".NotificationUtils.MyFirebaseMessagingService"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

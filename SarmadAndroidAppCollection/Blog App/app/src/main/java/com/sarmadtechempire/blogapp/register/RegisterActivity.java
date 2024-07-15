@@ -299,26 +299,27 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void saveUserFCMToken() {
-
+  private void saveUserFCMToken() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null)
-        {
+        if (user != null) {
             String userId = user.getUid();
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if(!task.isSuccessful())
-                    {
-                        Log.w(TAG, "Fetching FCM token failed", task.getException());
-                        return;
-                    }
-                    String token = task.getResult();
-                    DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
-                    tokensRef.child(userId).setValue(token);
-
-                }
-            });
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String token = task.getResult();
+                            DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
+                            tokensRef.child(userId).setValue(token)
+                                    .addOnCompleteListener(tokenTask -> {
+                                        if (tokenTask.isSuccessful()) {
+                                            Log.d(TAG, "FCM token saved successfully");
+                                        } else {
+                                            Log.w(TAG, "Failed to save FCM token", tokenTask.getException());
+                                        }
+                                    });
+                        } else {
+                            Log.w(TAG, "Fetching FCM token failed", task.getException());
+                        }
+                    });
         }
     }
 
@@ -393,3 +394,4 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 }
+

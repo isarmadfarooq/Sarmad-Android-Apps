@@ -28,20 +28,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
-        String imageUrl = remoteMessage.getNotification().getImageUrl() != null ? remoteMessage.getNotification().getImageUrl().toString() : null;
+        if (remoteMessage.getNotification() != null) {
+            String title = remoteMessage.getNotification().getTitle();
+            String body = remoteMessage.getNotification().getBody();
+            String imageUrl = remoteMessage.getNotification().getImageUrl() != null ? remoteMessage.getNotification().getImageUrl().toString() : null;
 
-        // Check and request VIBRATE permission
+            Log.d(TAG, "Notification received: " + title + " - " + body);
+            showNotification(title, body, imageUrl);
+        } else {
+            Log.e(TAG, "Notification payload is null");
+        }
+    }
+
+    private void showNotification(String title, String body, String imageUrl) {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
             Log.e(TAG, "Vibrate permission not granted");
-            // Handle the case where permission is not granted
             return;
         }
 
-        // Ringtone and vibration
+        Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         try {
-            Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             RingtoneManager.getRingtone(getApplicationContext(), notificationSound).play();
         } catch (Exception e) {
             Log.e(TAG, "Failed to play ringtone", e);

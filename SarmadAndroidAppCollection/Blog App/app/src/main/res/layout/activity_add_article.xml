@@ -32,7 +32,7 @@
             android:src="@drawable/back_icon"/>
 
         <TextView
-            android:id="@+id/mainTitteTv"
+            android:id="@+id/mainTitteHeadingTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/backIconIv"
@@ -47,7 +47,7 @@
             android:id="@+id/blog_title_Tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/mainTitteTv"
+            android:layout_below="@+id/mainTitteHeadingTv"
             android:layout_marginTop="100dp"
             android:layout_marginStart="32dp"
             android:text="@string/blog_title"
@@ -129,6 +129,30 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:backgroundTint="@color/blue" />
+
+        <com.dinuscxj.progressbar.CircleProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:progress_style="line"
+            app:progress_stroke_width="1dp"
+            app:progress_start_color="@android:color/holo_purple"
+            app:progress_end_color="@android:color/holo_green_light"
+            app:progress_background_color="@android:color/darker_gray"
+            android:layout_below="@id/mainTitteHeadingTv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            app:progress_start_degree="-90"
+            android:visibility="gone"
+            app:progress_text_size="0dp"
+            app:drawBackgroundOutsideProgress="true"
+            app:progress_shader="sweep"
+            app:progress_stroke_cap="round"
+            app:progress_blur_style="solid"
+            app:progress_blur_radius="5dp"
+            app:line_width="4dp"
+            app:line_count="30"/>
+
 
     </RelativeLayout>
 
