@@ -100,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+    @Override
+    public void onBackPressed() {
+        // Finish the activity to exit the app
+        super.onBackPressed();
+        finishAffinity(); // This will close all the activities and exit the app
+    }
 
     private void loadUserProfileImage(String userId) {
         // Load user profile image from Firebase storage or database

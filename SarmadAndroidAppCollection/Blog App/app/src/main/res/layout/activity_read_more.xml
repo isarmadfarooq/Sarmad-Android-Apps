@@ -136,20 +136,21 @@
         android:id="@+id/like_float_action_btn"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_margin="32dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
         android:contentDescription="@string/like_counts_tv"
         android:src="@drawable/like_black_icon"
         app:backgroundTint="?attr/splashTextColor"
         app:borderWidth="2dp"
         app:fabSize="normal"
         app:shapeAppearanceOverlay="@style/round"
-        app:tint="@color/white" />
+        app:tint="?attr/iconColor" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/unsaved_floating_Action_Btn"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_margin="32dp"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/save_article_btn"
         android:src="@drawable/post_icon_red"
         app:backgroundTint="?attr/splashTextColor"
