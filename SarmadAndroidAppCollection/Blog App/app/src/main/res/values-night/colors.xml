@@ -1,4 +1,7 @@
 <resources>
     <color name="splash_text_color_light">#FFFFFF</color>
     <color name="splash_text_color_dark">#000000</color>
+
+    <color name="icon_color_light">#FFFFFFFF</color>
+    <color name="icon_color_dark">#FF000000</color>
 </resources>

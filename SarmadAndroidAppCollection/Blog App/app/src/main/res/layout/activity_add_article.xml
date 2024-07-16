@@ -20,7 +20,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/rectangle_background"
             app:tint="?attr/splashTextColor" />
-        
+
         <ImageView
             android:id="@+id/backIconIv"
             android:layout_width="24dp"
