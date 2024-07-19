@@ -40,41 +40,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        // Initialize view binding for the main activity layout
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("blogs");
-        blogItemModel = new ArrayList<>(); // Initialize the list
+        blogItemModel = new ArrayList<>();
 
         String userId = auth.getCurrentUser().getUid();
 
-        // Set UserProfileImage
         if (userId != null) {
             loadUserProfileImage(userId);
         }
 
-        // Initialize the recycler view and set adapter
         RecyclerView recyclerView = binding.blogRv;
         BlogAdapter blogAdapter = new BlogAdapter(this, blogItemModel);
         recyclerView.setAdapter(blogAdapter);
 
-        // Fetch data from Firebase Database
         databaseReference.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                blogItemModel.clear(); // Clear the list before adding new data
+                if (isDestroyed() || isFinishing()) {
+                    return; // Prevent further processing if the activity is destroyed
+                }
+
+                blogItemModel.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     BlogItemModel blogItem = dataSnapshot.getValue(BlogItemModel.class);
                     if (blogItem != null) {
                         blogItemModel.add(blogItem);
                     }
                 }
-                // reverse the list
                 Collections.reverse(blogItemModel);
-                // Notify the adapter that data has changed
                 blogAdapter.notifyDataSetChanged();
             }
 
@@ -93,27 +91,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Handle window insets for the root view
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
     }
+
     @Override
     public void onBackPressed() {
-        // Finish the activity to exit the app
         super.onBackPressed();
-        finishAffinity(); // This will close all the activities and exit the app
+        finishAffinity();
     }
 
     private void loadUserProfileImage(String userId) {
-        // Load user profile image from Firebase storage or database
         DatabaseReference userReference = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("users").child(userId);
 
         userReference.child("profileImage").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (isDestroyed() || isFinishing()) {
+                    return; // Prevent further processing if the activity is destroyed
+                }
+
                 String profileImageUrl = snapshot.getValue(String.class);
                 if (profileImageUrl != null) {
                     Glide.with(MainActivity.this)
@@ -124,10 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error if needed
                 Toast.makeText(MainActivity.this, "Failed to load user profile image", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }

@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.volley)
     // Library for edittext
+
     implementation(libs.google.google.auth.library.oauth2.http)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

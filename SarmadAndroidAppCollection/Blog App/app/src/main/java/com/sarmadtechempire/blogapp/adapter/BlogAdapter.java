@@ -2,6 +2,7 @@ package com.sarmadtechempire.blogapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,8 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
 
             binding.bloggerNameTv.setText(blogItemModel.getUserName());
             binding.dateTv.setText(blogItemModel.getDate());
-            binding.blogColumnTv.setText(blogItemModel.getPost());
+//            binding.blogColumnTv.setText(blogItemModel.getPost());
+            binding.blogColumnTv.setText(Html.fromHtml(blogItemModel.getPost(), Html.FROM_HTML_MODE_LEGACY));
             binding.likeCountsTv.setText(String.valueOf(blogItemModel.getLikeCount()));
 
             // Set onClickListener
