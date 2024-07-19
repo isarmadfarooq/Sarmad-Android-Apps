@@ -91,16 +91,138 @@
             android:textColor="?attr/splashTextColor"
             android:textSize="24sp"
             android:fontFamily="@font/love_ya_like_a_sister"/>
+        
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/boldBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/blog_description_Tv"
+            android:layout_marginStart="32dp"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:text="@string/bold_txt"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/ic_bold"
+            android:padding="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/italicBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/blog_description_Tv"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/boldBtn"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:text="@string/italic_btn"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/ic_italic"
+            android:padding="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/underLineBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/blog_description_Tv"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/italicBtn"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:text="@string/u_line_btn"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/ic_underline"
+            android:padding="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/noFormatBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/underLineBtn"
+            android:layout_toEndOf="@id/italicBtn"
+            android:layout_marginStart="10dp"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:textSize="12sp"
+            android:text="@string/clear_fmt"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/no_format_btn"
+            android:padding="8dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/alignLeftBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/underLineBtn"
+            android:layout_toStartOf="@id/noFormatBtn"
+            android:layout_marginStart="10dp"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:text="@string/left_align"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/format_align_left"
+            android:padding="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/alignRightBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/underLineBtn"
+            android:layout_toStartOf="@id/alignLeftBtn"
+            android:layout_marginStart="10dp"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:text="@string/align_right"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/format_align_right"
+            android:padding="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/alignCenterBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/alignRightBtn"
+            android:layout_toStartOf="@id/alignLeftBtn"
+            android:layout_marginStart="10dp"
+            android:textAllCaps="false"
+            android:elevation="10dp"
+            app:backgroundTint="@null"
+            android:text="@string/align_center"
+            android:fontFamily="@font/montserrat_semibold"
+            android:background="@drawable/blog_editor_btn"
+            android:drawableStart="@drawable/format_align_center"
+            android:padding="5dp"/>
+
 
         <com.google.android.material.textfield.TextInputLayout
+
             android:id="@+id/blog_descriptionTextIl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="?attr/splashTextColor"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginTop="12dp"
-            android:layout_below="@+id/blog_description_Tv">
+            android:layout_marginTop="25dp"
+            android:layout_below="@+id/alignCenterBtn">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -110,7 +232,12 @@
                 android:textColorHint="?attr/splashTextColor"
                 android:textSize="14sp"
                 android:gravity="top"
-                android:background="@drawable/btn_background_stroke_red"/>
+                android:background="@drawable/btn_background_stroke_red"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                android:inputType="textMultiLine"
+                android:scrollHorizontally="false"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

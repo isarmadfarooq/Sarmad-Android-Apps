@@ -2,6 +2,7 @@ package com.sarmadtechempire.blogapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Toast;
 
@@ -46,7 +47,7 @@ public class ReadMoreActivity extends AppCompatActivity {
             binding.mainTitteHeadingTv.setText(blogs.getHeading());
             binding.bloggerNameTv.setText(blogs.getUserName());
             binding.dateTv.setText(blogs.getDate());
-            binding.fullBlogDescriptionTv.setText(blogs.getPost());
+            binding.fullBlogDescriptionTv.setText(Html.fromHtml(blogs.getPost(),Html.FROM_HTML_MODE_LEGACY));
 
             String userImageUrl = blogs.getImageUrl();
             Glide.with(this)
