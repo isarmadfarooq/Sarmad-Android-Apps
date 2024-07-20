@@ -89,10 +89,10 @@ public class AddArticleActivity extends AppCompatActivity {
                                 String userNameFromDb = userData.getName();
                                 String userImageUrlFromDb = userData.getProfileImage();
                                 String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
                                 BlogItemModel blogItemModel = new BlogItemModel(userId, userImageUrlFromDb, title, description, currentDate, userNameFromDb);
                                 String key = databaseReference.push().getKey();
                                 if (key != null) {
+                                    blogItemModel.setPostId(key);
                                     databaseReference.child(key).setValue(blogItemModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

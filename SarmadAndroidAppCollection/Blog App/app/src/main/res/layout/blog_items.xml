@@ -153,12 +153,11 @@
             android:id="@+id/blog_like_click"
             android:layout_width="20dp"
             android:layout_height="18dp"
-            android:src="@drawable/like_black_icon"
+            android:src="@drawable/like_white_icon"
             android:layout_toStartOf="@id/save_blog_btn"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="20dp"
-            app:tint="?attr/splashTextColor"
             tools:ignore="ContentDescription" />
 
         <TextView
