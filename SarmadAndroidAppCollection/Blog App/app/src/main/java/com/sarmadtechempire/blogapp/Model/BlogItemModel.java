@@ -130,7 +130,12 @@ package com.sarmadtechempire.blogapp.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.lifecycle.MutableLiveData;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BlogItemModel implements Parcelable {
@@ -142,10 +147,13 @@ public class BlogItemModel implements Parcelable {
     private String date;
     private String userName;
     private int likeCount;
+    private String postId;
+    private MutableLiveData<List<String>> likesBy;
 
     // No-argument constructor
     public BlogItemModel() {
         // Required for Firebase deserialization
+        this.likesBy = new MutableLiveData<>(new ArrayList<>()); // Initialize here
     }
 
     public BlogItemModel(String userId, String imageUrl, String heading, String post, String date, String userName) {
@@ -155,7 +163,9 @@ public class BlogItemModel implements Parcelable {
         this.post = post != null ? post : "";
         this.date = date != null ? date : "";
         this.userName = userName != null ? userName : "";
-        this.likeCount = 0; // Default value for likeCount
+        this.likeCount = 0;
+        this.postId = "";
+        this.likesBy = new MutableLiveData<>(new ArrayList<>()); // Initialize here
     }
 
     protected BlogItemModel(Parcel in) {
@@ -166,6 +176,10 @@ public class BlogItemModel implements Parcelable {
         date = in.readString();
         userName = in.readString();
         likeCount = in.readInt();
+        postId = in.readString();
+        List<String> likesList = new ArrayList<>();
+        in.readStringList(likesList);
+        likesBy = new MutableLiveData<>(likesList);
     }
 
     public static final Parcelable.Creator<BlogItemModel> CREATOR = new Parcelable.Creator<BlogItemModel>() {
@@ -194,6 +208,10 @@ public class BlogItemModel implements Parcelable {
         dest.writeString(date);
         dest.writeString(userName);
         dest.writeInt(likeCount);
+        dest.writeString(postId);
+        // Write the list to Parcel
+        List<String> likesList = likesBy.getValue() != null ? likesBy.getValue() : new ArrayList<>();
+        dest.writeStringList(likesList);
     }
 
     // Getters
@@ -225,6 +243,14 @@ public class BlogItemModel implements Parcelable {
         return likeCount;
     }
 
+    public String getPostId() {
+        return postId;
+    }
+
+    public List<String> getLikesBy() {
+        return likesBy.getValue() != null ? new ArrayList<>(likesBy.getValue()) : new ArrayList<>();
+    }
+
     // Setters
     public void setUserId(String userId) {
         this.userId = userId;
@@ -254,6 +280,14 @@ public class BlogItemModel implements Parcelable {
         this.likeCount = likeCount;
     }
 
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public void setLikesBy(MutableLiveData<List<String>> likesBy) {
+        this.likesBy = likesBy != null ? likesBy : new MutableLiveData<>(new ArrayList<>()); // Initialize if null
+    }
+
     // toMap method
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
@@ -264,6 +298,8 @@ public class BlogItemModel implements Parcelable {
         result.put("date", date);
         result.put("userName", userName);
         result.put("likeCount", likeCount);
+        result.put("postId", postId);
+        result.put("likesBy", likesBy.getValue() != null ? new ArrayList<>(likesBy.getValue()) : new ArrayList<>());
         return result;
     }
 }
