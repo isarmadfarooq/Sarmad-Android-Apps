@@ -57,7 +57,7 @@
         android:layout_marginEnd="35dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/save_article_btn"
-        android:src="@drawable/post_icon_red"/>
+        android:src="@drawable/post_icon_black"/>
 
     <!-- SearchView -->
     <androidx.appcompat.widget.SearchView

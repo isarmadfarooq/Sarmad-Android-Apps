@@ -31,7 +31,6 @@ import com.sarmadtechempire.blogapp.databinding.BlogItemsBinding;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder> {
 
@@ -149,10 +148,53 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
                 }
             });
 
+            // set the initial icon based on saved status
+            DatabaseReference userReference = databaseReference.child("users").child(currentUser.getUid() != null ? currentUser.getUid() : "");
+            DatabaseReference postSaveReference = userReference.child("saveBlogPosts").child(blogItemModel.getPostId());
+
+            postSaveReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists())
+                    {
+                        //if blog is already saved
+                        binding.saveBlogBtn.setImageResource(R.drawable.post_icon_red_fill);
+
+                    }
+                    else
+                    {
+                        binding.saveBlogBtn.setImageResource(R.drawable.post_icon_red);
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            // handle save button clicks
+            binding.saveBlogBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(currentUser!=null)
+                    {
+                        handleSaveIconClicked(blogItemModel.getPostId(), blogItemModel, binding);
+                    }
+                    else
+                    {
+                        Toast.makeText(context,"You have to login first",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            });
         }
 
 
-        private void handleLikedIconClicked(String postId, BlogItemModel blogItemModel, BlogItemsBinding binding) {
+
+    private void handleLikedIconClicked(String postId, BlogItemModel blogItemModel, BlogItemsBinding binding) {
             DatabaseReference userReference = databaseReference.child("users").child(currentUser.getUid());
             DatabaseReference postLikeReference = databaseReference.child("blogs").child(postId).child("likes");
 
@@ -225,6 +267,96 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
             else {
                 binding.blogLikeClick.setImageResource(R.drawable.like_red_icon);
             }
+        }
+
+        private void handleSaveIconClicked(String postId, BlogItemModel blogItemModel, BlogItemsBinding binding)
+        {
+            DatabaseReference userReference = databaseReference.child("users").child(currentUser.getUid());
+            userReference.child("saveBlogPosts").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    // If the blog is currently saved, so unsaved the blog
+                    if(snapshot.exists())
+                    {
+                        userReference.child("saveBlogPosts").child(postId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                // update the UI
+
+                                BlogItemModel clickedBlogItem = null;
+
+                                for(BlogItemModel item: items)
+                                {
+                                    if(item.getPostId().equals(postId))
+                                    {
+                                        clickedBlogItem = item;
+                                        break;
+                                    }
+                                }
+                                if(clickedBlogItem!=null)
+                                {
+                                    clickedBlogItem.setIsSaved(false);
+                                }
+                                notifyDataSetChanged();
+
+                                Context context = binding.getRoot().getContext();
+
+                                Toast.makeText(context,"Blog UnSaved",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Context context = binding.getRoot().getContext();
+                                Toast.makeText(context,"Fail to unsaved the blog",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        binding.saveBlogBtn.setImageResource(R.drawable.post_icon_red);
+                    }
+                    else
+                    {
+                        // If blog is not save so saved the blog
+                        userReference.child("saveBlogPosts").child(postId).setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+
+                                BlogItemModel clickBlogItem = null;
+                                for (BlogItemModel item : items) {
+                                    if(item.getPostId().equals(postId))
+                                    {
+                                        clickBlogItem = item;
+                                        break;
+                                    }
+                                }
+
+                                if (clickBlogItem != null) {
+                                clickBlogItem.setIsSaved(true);
+                            }
+                            notifyDataSetChanged();
+
+                                Context context = binding.getRoot().getContext();
+
+                                Toast.makeText(context,"Blog saved successfully",Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Context context = binding.getRoot().getContext();
+                                Toast.makeText(context,"Fail to save the blog",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        binding.saveBlogBtn.setImageResource(R.drawable.post_icon_red_fill);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
 }
