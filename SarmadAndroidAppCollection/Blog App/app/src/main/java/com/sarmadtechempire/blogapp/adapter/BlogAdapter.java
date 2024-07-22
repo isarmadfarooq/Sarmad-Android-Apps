@@ -61,10 +61,12 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
         holder.bind(blogItem);
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();
     }
+
 
     public class BlogViewHolder extends RecyclerView.ViewHolder {
 
@@ -91,11 +93,10 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
 
             binding.bloggerNameTv.setText(blogItemModel.getUserName());
             binding.dateTv.setText(blogItemModel.getDate());
-//            binding.blogColumnTv.setText(blogItemModel.getPost());
             binding.blogColumnTv.setText(Html.fromHtml(blogItemModel.getPost(), Html.FROM_HTML_MODE_LEGACY));
             binding.likeCountsTv.setText(String.valueOf(blogItemModel.getLikeCount()));
 
-            // Set onClickListener
+
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,7 +209,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
                                 postLikeReference.child(currentUser.getUid()).removeValue();
                                 List<String> likesByList = blogItemModel.getLikesBy();
                                 likesByList.remove(currentUser.getUid());
-                                blogItemModel.setLikesBy(new MutableLiveData<>(likesByList)); // Update MutableLiveData
+                                blogItemModel.setLikesBy(likesByList); // Update MutableLiveData
                                 updateLikeLikeButtonImage(binding, false);
                                 int newLikeCount = blogItemModel.getLikeCount() - 1;
                                 binding.likeCountsTv.setText(String.valueOf(newLikeCount));
@@ -233,7 +234,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
                                     likesByList = new ArrayList<>();
                                 }
                                 likesByList.add(currentUser.getUid());
-                                blogItemModel.setLikesBy(new MutableLiveData<>(likesByList)); // Update MutableLiveData
+                                blogItemModel.setLikesBy(likesByList); // Update MutableLiveData
                                 updateLikeLikeButtonImage(binding, true);
                                 int newLikeCount = blogItemModel.getLikeCount() + 1;
                                 binding.likeCountsTv.setText(String.valueOf(newLikeCount));

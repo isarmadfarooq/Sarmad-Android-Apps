@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // to go save blog activity page
+
+        binding.saveArticleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SaveBlogActivity.class);
+                startActivity(intent);
+            }
+        });
+
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("blogs");
         blogItemModel = new ArrayList<>();

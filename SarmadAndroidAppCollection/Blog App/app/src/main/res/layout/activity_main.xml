@@ -53,11 +53,11 @@
         android:id="@+id/save_article_btn"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_toStartOf="@id/userProfileCv"
-        android:layout_marginEnd="35dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="35dp"
+        android:layout_toStartOf="@id/userProfileCv"
         android:contentDescription="@string/save_article_btn"
-        android:src="@drawable/post_icon_black"/>
+        android:src="@drawable/post_icon_black" />
 
     <!-- SearchView -->
     <androidx.appcompat.widget.SearchView
