@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SaveBlogActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="850dp"
+        android:alpha="0.1"
+        android:contentDescription="@string/addarticlescreenbackground"
+        android:scaleType="centerCrop"
+        android:src="@drawable/rectangle_background"
+        app:tint="?attr/splashTextColor" />
+
+    <ImageView
+        android:id="@+id/backIconIv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="20dp"
+        android:contentDescription="@string/backiconiv"
+        android:src="@drawable/back_icon"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/backIconIv"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/savedBlogsRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/blog_items"/>
+
+    </FrameLayout>
+
+
+
+</RelativeLayout>

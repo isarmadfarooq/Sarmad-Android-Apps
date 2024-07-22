@@ -1,9 +1,6 @@
 package com.sarmadtechempire.blogapp.Model;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,9 +18,7 @@ public class BlogItemModel implements Parcelable {
     private Boolean isSaved;
     private int likeCount;
     private String postId;
-    private MutableLiveData<List<String>> likesBy;
-
-    // No-argument constructor
+    private List<String> likesBy;
 
     // No-argument constructor required for Firebase deserialization
     public BlogItemModel() {
@@ -36,15 +31,23 @@ public class BlogItemModel implements Parcelable {
         this.isSaved = false;
         this.likeCount = 0;
         this.postId = "";
-        this.likesBy = new MutableLiveData<>(new ArrayList<>());
+        this.likesBy = new ArrayList<>();
     }
 
     public BlogItemModel(String userId, String userImageUrlFromDb, String title, String description, String currentDate, String userNameFromDb) {
-        // Required for Firebase deserialization
-        this.likesBy = new MutableLiveData<>(new ArrayList<>()); // Initialize here
+        this.userId = userId != null ? userId : "";
+        this.imageUrl = userImageUrlFromDb != null ? userImageUrlFromDb : "";
+        this.heading = title != null ? title : "";
+        this.post = description != null ? description : "";
+        this.date = currentDate != null ? currentDate : "";
+        this.userName = userNameFromDb != null ? userNameFromDb : "";
+        this.isSaved = false;
+        this.likeCount = 0;
+        this.postId = "";
+        this.likesBy = new ArrayList<>();
     }
 
-    public BlogItemModel(String userId, String imageUrl, String heading, String post, String date, String userName, String isSaved) {
+    public BlogItemModel(String userId, String imageUrl, String heading, String post, String date, String userName, Boolean isSaved) {
         this.userId = userId != null ? userId : "";
         this.imageUrl = imageUrl != null ? imageUrl : "";
         this.heading = heading != null ? heading : "";
@@ -53,8 +56,8 @@ public class BlogItemModel implements Parcelable {
         this.userName = userName != null ? userName : "";
         this.likeCount = 0;
         this.postId = "";
-        this.isSaved = Boolean.valueOf(isSaved != null ? isSaved : "");
-        this.likesBy = new MutableLiveData<>(new ArrayList<>()); // Initialize here
+        this.isSaved = isSaved != null ? isSaved : false;
+        this.likesBy = new ArrayList<>();
     }
 
     protected BlogItemModel(Parcel in) {
@@ -66,13 +69,11 @@ public class BlogItemModel implements Parcelable {
         userName = in.readString();
         likeCount = in.readInt();
         postId = in.readString();
-        List<String> likesList = new ArrayList<>();
-        in.readStringList(likesList);
         isSaved = in.readByte() != 0;
-        likesBy = new MutableLiveData<>(likesList);
+        likesBy = in.createStringArrayList();
     }
 
-    public static final Parcelable.Creator<BlogItemModel> CREATOR = new Parcelable.Creator<BlogItemModel>() {
+    public static final Creator<BlogItemModel> CREATOR = new Creator<BlogItemModel>() {
         @Override
         public BlogItemModel createFromParcel(Parcel in) {
             return new BlogItemModel(in);
@@ -99,10 +100,8 @@ public class BlogItemModel implements Parcelable {
         dest.writeString(userName);
         dest.writeInt(likeCount);
         dest.writeString(postId);
-        dest.writeByte((byte) (isSaved != null && isSaved ? 1 : 0));
-        // Write the list to Parcel
-        List<String> likesList = likesBy.getValue() != null ? likesBy.getValue() : new ArrayList<>();
-        dest.writeStringList(likesList);
+        dest.writeByte((byte) (isSaved ? 1 : 0));
+        dest.writeStringList(likesBy);
     }
 
     // Getters
@@ -139,8 +138,9 @@ public class BlogItemModel implements Parcelable {
     }
 
     public List<String> getLikesBy() {
-        return likesBy.getValue() != null ? new ArrayList<>(likesBy.getValue()) : new ArrayList<>();
+        return new ArrayList<>(likesBy);
     }
+
     public Boolean getIsSaved() {
         return isSaved;
     }
@@ -178,9 +178,10 @@ public class BlogItemModel implements Parcelable {
         this.postId = postId;
     }
 
-    public void setLikesBy(MutableLiveData<List<String>> likesBy) {
-        this.likesBy = likesBy != null ? likesBy : new MutableLiveData<>(new ArrayList<>()); // Initialize if null
+    public void setLikesBy(List<String> likesBy) {
+        this.likesBy = likesBy != null ? likesBy : new ArrayList<>();
     }
+
     public void setIsSaved(Boolean isSaved) {
         this.isSaved = isSaved;
     }
@@ -197,7 +198,7 @@ public class BlogItemModel implements Parcelable {
         result.put("likeCount", likeCount);
         result.put("postId", postId);
         result.put("isSaved", isSaved);
-        result.put("likesBy", likesBy.getValue() != null ? new ArrayList<>(likesBy.getValue()) : new ArrayList<>());
+        result.put("likesBy", likesBy != null ? new ArrayList<>(likesBy) : new ArrayList<>());
         return result;
     }
 }

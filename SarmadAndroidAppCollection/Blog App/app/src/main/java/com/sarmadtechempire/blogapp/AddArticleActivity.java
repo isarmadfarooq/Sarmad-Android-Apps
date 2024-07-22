@@ -67,7 +67,6 @@ public class AddArticleActivity extends AppCompatActivity {
                 binding.circularProgressBar.setVisibility(View.VISIBLE); // Show progress bar
                 long startTime = System.currentTimeMillis();
                 String title = binding.blogTitleTextIL.getEditText().getText().toString().trim();
-//                String description = binding.blogDescriptionTextIl.getEditText().getText().toString().trim();
                 String description = Html.toHtml(binding.blogDescriptionTextIl.getEditText().getText(), Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL);
 
                 if (title.isEmpty() || description.isEmpty()) {
