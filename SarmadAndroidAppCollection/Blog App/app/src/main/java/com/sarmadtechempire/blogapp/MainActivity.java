@@ -53,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // to go to profile activity page
+        binding.userProfileCv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("blogs");
         blogItemModel = new ArrayList<>();

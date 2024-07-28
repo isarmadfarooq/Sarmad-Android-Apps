@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,9 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
 
     private List<BlogItemModel> items;
     private Context context;
+    private AdapterView.OnItemClickListener itemClickListener;
+
+
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();

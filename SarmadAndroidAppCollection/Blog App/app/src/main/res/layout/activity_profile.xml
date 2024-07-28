@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4E4E4E"
+    tools:context=".ProfileActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profileCv"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        app:cardCornerRadius="200dp">
+    
+    <ImageView
+        android:id="@+id/profileIv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/profile5"/>
+</androidx.cardview.widget.CardView>
+    
+    <TextView
+        android:id="@+id/userNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileCv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/userName"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/blog_divider"
+        android:layout_width="234dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userNameTv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="9dp"
+        app:dividerColor="#C8C8C8"/>
+
+
+    
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addNewBlogBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/blog_divider"
+            android:layout_marginTop="65dp"
+            android:drawablePadding="28dp"
+            android:layout_centerHorizontal="true"
+            android:background="@null"
+            android:text="@string/add_new_articles_btn"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:drawableStart="@drawable/add_new_articles"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/yourArticleBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addNewBlogBtn"
+                android:layout_marginTop="32dp"
+                android:drawablePadding="28dp"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:text="@string/your_articles_btn"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:drawableStart="@drawable/your_articles"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/logOutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/yourArticleBtn"
+                android:layout_marginTop="32dp"
+                android:drawablePadding="28dp"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:text="@string/log_out_btn"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:drawableStart="@drawable/logout"/>
+
+
+    <TextView
+        android:id="@+id/design_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/design_by"
+        android:layout_below="@+id/logOutBtn"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:textSize="17sp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/sarmad_tech_empire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:textSize="17sp"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/love_ya_like_a_sister"
+        android:text="@string/sarmadtechempire" />
+
+
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

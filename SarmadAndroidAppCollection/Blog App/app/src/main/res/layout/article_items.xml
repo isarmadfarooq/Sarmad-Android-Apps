@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    app:cardElevation="5dp"
+    android:layout_marginBottom="20dp"
+    app:cardCornerRadius="9dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/barrierCl"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/blog_heading_text"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:textSize="16sp"
+                android:textColor="@color/blue"
+                android:layout_marginStart="9dp"
+                android:ellipsize="end"
+                android:layout_marginTop="13dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textStyle="bold"
+                android:text="@string/blog_heading_txt"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="blog_heading_text" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/blogUserProfileCv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:cardCornerRadius="200dp"
+                app:layout_constraintTop_toTopOf="@id/blog_heading_text"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="9dp">
+
+                <ImageView
+                    android:id="@+id/profileIv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/blog_user_profile_image"
+                    android:src="@drawable/profile5"
+                    android:scaleType="centerCrop"/>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/blogger_name_tv"
+            android:layout_width="70dp"
+            android:layout_height="44dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="12sp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="9dp"
+            android:layout_toEndOf="@id/barrierCl"
+            android:textColor="?attr/splashTextColor"
+            android:fontFamily="@font/montserrat_light"
+            android:text="@string/blogger_name_tv"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:ellipsize="end"
+            android:maxLines="2"/>
+
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_tv"
+            android:textColor="@color/date_color"
+            android:fontFamily="@font/montserrat_mediumitalic"
+            android:layout_below="@+id/blogger_name_tv"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="9dp"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/blog_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date_tv"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginEnd="9dp"
+            app:dividerColor="@color/date_color"/>
+
+        <TextView
+            android:id="@+id/blog_column_tv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="14dp"
+            android:maxLines="4"
+            android:layout_below="@+id/blog_divider"
+            android:layout_marginStart="9dp"
+            android:layout_marginEnd="9dp"
+            android:letterSpacing="0.03"
+            android:lineHeight="22sp"
+            android:ellipsize="end"
+            android:text="@string/blog_column_tv"
+            android:textSize="12sp"
+            android:fontFamily="@font/montserrat_light"
+            android:paddingTop="5dp"
+            android:textColor="?attr/splashTextColor"
+            tools:ignore="UnusedAttribute" />
+
+        <Button
+            android:id="@+id/blog_post_btn"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/blog_column_tv"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_background_stroke_blue"
+            android:elevation="10dp"
+            android:fontFamily="@font/montserrat_light"
+            android:text="@string/blog_post_btn_readmore"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/blue" />
+
+        <Button
+            android:id="@+id/blog_edit_btn"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/blog_column_tv"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/blog_post_btn"
+            android:background="@drawable/btn_background_stroke_blue"
+            android:elevation="10dp"
+            android:fontFamily="@font/montserrat_light"
+            android:text="@string/edit_btn"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/black" />
+
+        <Button
+            android:id="@+id/blog_del_btn"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/blog_column_tv"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/blog_edit_btn"
+            android:background="@drawable/btn_background_stroke_blue"
+            android:elevation="10dp"
+            android:fontFamily="@font/montserrat_light"
+            android:text="@string/blog_post_btn_readmore"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/red" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

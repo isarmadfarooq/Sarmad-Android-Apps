@@ -49,4 +49,9 @@
     <string name="left_align">Left</string>
     <string name="align_right">Right</string>
     <string name="align_center">Center</string>
+    <string name="userName">Sarmad Farooq</string>
+    <string name="add_new_articles_btn">Add new articles</string>
+    <string name="your_articles_btn">Your Articles</string>
+    <string name="log_out_btn">Log out</string>
+    <string name="edit_btn">Edit</string>
 </resources>
