@@ -54,4 +54,6 @@
     <string name="your_articles_btn">Your Articles</string>
     <string name="log_out_btn">Log out</string>
     <string name="edit_btn">Edit</string>
+    <string name="delete_btn">Delete</string>
+    <string name="read_article_btn">Read</string>
 </resources>

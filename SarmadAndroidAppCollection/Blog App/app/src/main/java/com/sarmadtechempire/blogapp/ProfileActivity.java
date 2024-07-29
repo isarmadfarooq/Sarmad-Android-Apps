@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, AddArticleActivity.class);
+                intent.putExtra("origin", "profile");
                 startActivity(intent);
             }
         });
