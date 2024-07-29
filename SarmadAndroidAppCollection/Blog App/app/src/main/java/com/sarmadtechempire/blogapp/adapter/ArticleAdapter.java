@@ -3,6 +3,7 @@ import android.content.Context;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import androidx.annotation.NonNull;
@@ -17,13 +18,22 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
     private List<BlogItemModel> items;
     private Context context;
-    private AdapterView.OnItemClickListener itemClickListener;
+    private OnItemClickListener itemClickListener;
 
-    public ArticleAdapter(Context context, List<BlogItemModel> items, AdapterView.OnItemClickListener itemClickListener)
-    {
+    public ArticleAdapter(Context context, List<BlogItemModel> items, OnItemClickListener itemClickListener) {
         this.context = context;
         this.items = items;
         this.itemClickListener = itemClickListener;
+    }
+
+    public interface OnItemClickListener {
+
+        void onEditClick(BlogItemModel blogItem);
+
+        void onReadMoreClick(BlogItemModel blogItem);
+
+        void onDeleteClick(BlogItemModel blogItem);
+
     }
 
     @NonNull
@@ -76,6 +86,32 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             binding.bloggerNameTv.setText(blogItem.getUserName());
             binding.dateTv.setText(blogItem.getDate());
             binding.blogColumnTv.setText(Html.fromHtml(blogItem.getPost(), Html.FROM_HTML_MODE_LEGACY));
+
+            // handle Read More Click
+
+            binding.blogReadBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onReadMoreClick(blogItem);
+                }
+            });
+
+            // handle Edit  Click
+            binding.blogEditBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onEditClick(blogItem);
+
+                }
+            });
+
+            // handle Delete Click
+            binding.blogDelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onDeleteClick(blogItem);
+                }
+            });
         }
     }
 }

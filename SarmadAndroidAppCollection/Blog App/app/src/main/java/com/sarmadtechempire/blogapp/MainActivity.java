@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
         binding.addArticleFloatActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addArticleIntent = new Intent(MainActivity.this, AddArticleActivity.class);
-                startActivity(addArticleIntent);
-                finish();
+                Intent intent = new Intent(MainActivity.this, AddArticleActivity.class);
+                intent.putExtra("origin", "main");
+                startActivity(intent);
             }
         });
 

@@ -37,7 +37,7 @@ import java.util.Date;
 public class AddArticleActivity extends AppCompatActivity {
 
     private static final String TAG = "AddArticleActivity";
-
+    private String origin;
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app");
     DatabaseReference databaseReference = database.getReference("blogs");
     DatabaseReference userReference = database.getReference("users");
@@ -51,12 +51,15 @@ public class AddArticleActivity extends AppCompatActivity {
         binding = ActivityAddArticleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //Get origin from the intent extra
+        origin = getIntent().getStringExtra("origin");
+
         BlogDescription_textEditor_Funcionalities();
 
         binding.backIconIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToMain();
+                navigateBack();
             }
         });
 
@@ -288,9 +291,37 @@ public class AddArticleActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        // Navigate to the MainActivity instead of exiting the app
+        super.onBackPressed();
+        navigateBack();
+        finish();
+    }
+
+
+
+    private void navigateBack() {
+        if ("profile".equals(origin)) {
+            navigateToProfile();
+            finish();
+        } else {
+            navigateToMain();
+            finish();
+        }
+    }
+
     private void navigateToMain() {
         Intent welcome = new Intent(AddArticleActivity.this, MainActivity.class);
+        welcome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(welcome);
+        finish();
+    }
+
+    private void navigateToProfile() {
+        Intent intent = new Intent(AddArticleActivity.this, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
 }
