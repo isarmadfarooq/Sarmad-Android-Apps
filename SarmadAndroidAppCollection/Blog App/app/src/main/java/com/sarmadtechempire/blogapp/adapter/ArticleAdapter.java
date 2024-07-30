@@ -101,7 +101,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                 @Override
                 public void onClick(View v) {
                     itemClickListener.onEditClick(blogItem);
-
                 }
             });
 

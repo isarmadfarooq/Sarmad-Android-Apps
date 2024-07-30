@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddArticleActivity">
+    tools:context=".Edit_Blog_Activity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/blue"
             android:textSize="20sp"
-            android:text="@string/add_new_blog_here_main_title"/>
+            android:text="@string/edit_your_blog_here_Tv"/>
 
         <TextView
             android:id="@+id/blog_title_Tv"
@@ -91,7 +91,7 @@
             android:textColor="?attr/splashTextColor"
             android:textSize="24sp"
             android:fontFamily="@font/love_ya_like_a_sister"/>
-        
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/boldBtn"
             android:layout_width="wrap_content"
@@ -250,7 +250,7 @@
             android:background="@drawable/btn_background_stroke_blue"
             android:elevation="10dp"
             android:fontFamily="@font/montserrat_light"
-            android:text="@string/add_blog_btn"
+            android:text="@string/save_blog_btn_txt"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:textSize="14sp"

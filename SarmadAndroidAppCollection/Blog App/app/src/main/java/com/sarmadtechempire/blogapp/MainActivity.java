@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DatabaseReference databaseReference;
     private List<BlogItemModel> blogItemModel;
+    private List<BlogItemModel> filteredBlogItemModel;
+    private BlogAdapter blogAdapter;
     private FirebaseAuth auth;
 
     @Override
@@ -43,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // to go save blog activity page
+        // Initialize lists
+        blogItemModel = new ArrayList<>();
+        filteredBlogItemModel = new ArrayList<>();
 
+        // to go save blog activity page
         binding.saveArticleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance("https://blog-app-389b6-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("blogs");
-        blogItemModel = new ArrayList<>();
 
         String userId = auth.getCurrentUser().getUid();
 
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         RecyclerView recyclerView = binding.blogRv;
-        BlogAdapter blogAdapter = new BlogAdapter(this, blogItemModel);
+        blogAdapter = new BlogAdapter(this, filteredBlogItemModel);
         recyclerView.setAdapter(blogAdapter);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -91,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         blogItemModel.add(blogItem);
                     }
                 }
-                Collections.reverse(blogItemModel);
-                blogAdapter.notifyDataSetChanged();
+                filterBlogs(""); // Reset filter to display all items initially
             }
 
             @Override
@@ -107,6 +111,22 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AddArticleActivity.class);
                 intent.putExtra("origin", "main");
                 startActivity(intent);
+            }
+        });
+
+
+// Set up the SearchView
+        binding.searchBlog.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterBlogs(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterBlogs(newText);
+                return false;
             }
         });
 
@@ -146,5 +166,20 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Failed to load user profile image", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void filterBlogs(String query) {
+        filteredBlogItemModel.clear();
+        if (query.isEmpty()) {
+            filteredBlogItemModel.addAll(blogItemModel);
+        } else {
+            for (BlogItemModel blogItem : blogItemModel) {
+                if (blogItem.getHeading().toLowerCase().contains(query.toLowerCase()) ||
+                        blogItem.getPost().toLowerCase().contains(query.toLowerCase())) {
+                    filteredBlogItemModel.add(blogItem);
+                }
+            }
+        }
+        blogAdapter.notifyDataSetChanged();
     }
 }
