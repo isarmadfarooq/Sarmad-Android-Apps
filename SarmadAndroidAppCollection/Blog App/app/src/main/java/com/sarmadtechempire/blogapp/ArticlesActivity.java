@@ -1,5 +1,6 @@
 package com.sarmadtechempire.blogapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class ArticlesActivity extends AppCompatActivity {
     private List<BlogItemModel> blogSaveList;
     private FirebaseAuth auth;
     private ArticleAdapter articleAdapter;
+    public static final int EDIT_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,27 +52,33 @@ public class ArticlesActivity extends AppCompatActivity {
         // get current user Id
         String currentUserId = auth.getCurrentUser().getUid();
 
-        articleAdapter = new ArticleAdapter(this, blogSaveList, new ArticleAdapter.OnItemClickListener() {
-            @Override
-            public void onEditClick(BlogItemModel blogItem) {
 
-            }
+            articleAdapter = new ArticleAdapter(this, blogSaveList, new ArticleAdapter.OnItemClickListener() {
+                @Override
+                public void onEditClick(BlogItemModel blogItem) {
 
-            @Override
-            public void onReadMoreClick(BlogItemModel blogItem) {
+                    Intent intent = new Intent(ArticlesActivity.this, Edit_Blog_Activity.class);
+                    intent.putExtra("blogItems", blogItem);
+                    startActivityForResult(intent, EDIT_REQUEST_CODE);
 
-                Intent intent = new Intent(ArticlesActivity.this, ReadMoreActivity.class);
-                intent.putExtra("blogItems", blogItem);
-                startActivity(intent);
+                }
 
-            }
+                @Override
+                public void onReadMoreClick(BlogItemModel blogItem) {
 
-            @Override
-            public void onDeleteClick(BlogItemModel blogItem) {
-                showDeleteConfirmationDialog(blogItem);
+                    Intent intent = new Intent(ArticlesActivity.this, Edit_Blog_Activity.class);
+                    intent.putExtra("blogItems", blogItem);
+                    startActivity(intent);
 
-            }
-        });
+                }
+
+                @Override
+                public void onDeleteClick(BlogItemModel blogItem) {
+                    showDeleteConfirmationDialog(blogItem);
+
+                }
+            });
+
         RecyclerView recyclerView = binding.blogRv;
         recyclerView.setAdapter(articleAdapter);
 
@@ -131,6 +139,20 @@ public class ArticlesActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+
+        if(resultCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK)
+        {
+            Toast.makeText(this, "Blog Updated Successfully", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Blog Update Failed", Toast.LENGTH_SHORT).show();
+        }
     }
+}
 
 

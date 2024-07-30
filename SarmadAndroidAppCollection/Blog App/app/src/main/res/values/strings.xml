@@ -56,4 +56,6 @@
     <string name="edit_btn">Edit</string>
     <string name="delete_btn">Delete</string>
     <string name="read_article_btn">Read</string>
+    <string name="edit_your_blog_here_Tv">Edit Your Blog Here</string>
+    <string name="save_blog_btn_txt">Save Blog</string>
 </resources>
